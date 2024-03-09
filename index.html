@@ -3,49 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TzuCheng Chang's Portfolio</title>
+    <title>Portfolio</title>
     <meta name="description" content="This is a self-intro website in the Web Crawler Practice class."/>
     <link rel="icon" href="src/img/logo.ico">
-    <link rel="stylesheet" href="src/main.css">
-    <style>
-    </style>
+    <link rel="stylesheet" href="src/index.css">
 </head>
 <body>
     <header class="header">
-        <h1 id="name">TzuCheng Chang's website</h1>
-        <nav id="navigator">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a herf="">It's Me</a></li>
-                <li><a href="https://www.instagram.com/_tzu_c/" target="_blank">Instagram</a></li>
-                <li><a href="mailto:41023112L@gapps.ntnu.edu.tw">Contact me</a></li>
-                <li><a href="https://github.com/coconutPuf/" target="_blank">GitHub</a></li>
-                <li><a href="https://www.ntnu.edu.tw/" target="_blank">NTNU</a></li>
-            </ul>
+        <h1 class="name" style="font-size: 40px;">前端好難</h1>
+        <nav class="navigator">
+            <a href="index.html">Home</a>
+            <a href="src/aboutMe/aboutMe.html">About Me</a>
+            <a href="https://www.instagram.com/_tzu_c/" target="_blank">Instagram</a>
+            <a href="https://github.com/tzu901/" target="_blank">GitHub</a>
+            <a style="float:right" href="mailto:41023112L@gapps.ntnu.edu.tw">Contact Me</a>
         </nav>  
     </header>
 
-    <!-- <section class="info">
-        <p id="location">Taipei City, Taiwan</p>
-        <p id="school">National Taiwan Normal University, NTNU</p>
-        <p id="major">Dept. Geography</p>
-        <p id="class">Class A, Junior</p>
-    </section> -->
-
-    <div class="row">
-        <div class="leftColumn">
-            <div class="card"></div>
-            <div class="card"></div>
-        </div>
-        <div class="rightColumn">
-            <div class="card"></div>
-            <div class="card"></div>
+    <div class="container">
+        <div class="circle">
+            <a href="https://www.pokemon.com/" target="_blank" class="circleLink" style="background-image: url('src/img/ball.png')"></a>
+            <a href="https://www.pokemon.com/" target="_blank" class="circleLink" style="background-image: url('src/img/ball.png')"></a>
+            <a href="https://www.pokemon.com/" target="_blank" class="circleLink" style="background-image: url('src/img/ball.png')"></a>
+            <a href="https://www.pokemon.com/" target="_blank" class="circleLink" style="background-image: url('src/img/ball.png')"></a>
+            <a href="https://www.pokemon.com/" target="_blank" class="circleLink" style="background-image: url('src/img/ball.png')"></a>
         </div>
     </div>
+    <div class="myCursor"></div>
+    
+    <footer class="banner">Copyright © 2024 TzuCheng.</footer>
 
-
-    <footer class="banner"></footer>
-
-    <script src="src/main.js"></script>
+    <script language="javascript">
+        window.alert("請將鼠標碰觸寶貝球，\n本次作業在About Me！");
+    </script>
 </body>
 </html>
