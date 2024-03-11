@@ -2,11 +2,13 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     background: #c8daea; 
+    margin-bottom: 60px, auto;
 }
 * {
     /* cursor: url('https://images.plurk.com/59Jzpag8mGcOqCRBqW4k7o.png'), auto; */
     cursor: url("https://images.plurk.com/48oVAaqTfzZtTKVN4BzY9l.png"), auto;
-  }
+}
+
 .header {
     background-color: #f0dcdd;
     text-align: center;
@@ -137,11 +139,9 @@ html, body {
   color: black; 
 }
 
-
 @media (max-width: 767px) {
   .header, .navigator a {
     padding-top: 5px;
-    padding-bottom: 5px;
   }
 
   .navigator a {
