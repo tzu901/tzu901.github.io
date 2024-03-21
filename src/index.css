@@ -46,17 +46,16 @@ html, body {
     border-radius: 50%;
     margin: 60px auto;
     animation: rotateContainer 0.5s linear infinite;
-    transition: all 0.5s ease;
 }
 .circle:hover {
-    animation: rotateContainer s linear infinite;
+    animation: rotateContainer 10s linear infinite;
 }
 @keyframes rotateContainer {
     to { transform: rotate(360deg); }
 }
 .circleLink {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background-size: cover;
     position: absolute;
@@ -67,7 +66,7 @@ html, body {
 }
 .circle:hover .circleLink {
     transform: translate(-50%, -50%) rotate(var(--rotate)) translate(180px) rotate(calc(-1 * var(--rotate)));
-}
+  }
 .circleLink:nth-child(1) { --rotate: 0deg; }
 .circleLink:nth-child(2) { --rotate: 72deg; }
 .circleLink:nth-child(3) { --rotate: 144deg; }
@@ -140,6 +139,10 @@ html, body {
 }
 
 @media (max-width: 767px) {
+  body, .mainContent {
+    padding-bottom: 60px
+  }
+
   .header, .navigator a {
     padding-top: 5px;
   }
