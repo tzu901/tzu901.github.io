@@ -4,7 +4,7 @@ function creditCardChecking() {
     const creditCardInput = document.getElementById('creditCard');
     const validationResult = document.getElementById('validation');
     const bank = document.getElementById('bank');
-    const creditCard = document.getElementById('creditCard').value.replace(/-/g, '');
+    const creditCard = document.getElementById('creditCard').value.replace(/-/g, '').replace(/ /g, '');
 
     bank.textContent = ''
     if (creditCard == '') {
