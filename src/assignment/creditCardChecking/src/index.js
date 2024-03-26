@@ -1,8 +1,16 @@
 
 function creditCardChecking() {
+    
     const creditCardInput = document.getElementById('creditCard');
     const validationResult = document.getElementById('validation');
-    const creditCard = document.getElementById('creditCard').value.replace(/\D/g, '');
+    const bank = document.getElementById('bank');
+    const creditCard = document.getElementById('creditCard').value.replace(/-/g, '');
+
+    bank.textContent = ''
+    if (creditCard == '') {
+        validationResult.textContent = ''
+        return;
+    }
 
     if (creditCard[0] !== '3' && creditCard[0] !== '4' && creditCard[0] !== '5' || creditCard.length !== 16) {
         validationResult.textContent = 'Invalid';
@@ -12,10 +20,13 @@ function creditCardChecking() {
 
     if (creditCard[0] == 3) {
         console.log('American Express or JCB');
+        bank.textContent = 'American Express or JCB';
     } else if (creditCard[0] == 4) {
         console.log('Visa');
+        bank.textContent = 'Visa';
     } else if (creditCard[0] == 5) {
         console.log('MasterCard');
+        bank.textContent = 'MasterCard';
     }
     
     let total = 0, odd = true;

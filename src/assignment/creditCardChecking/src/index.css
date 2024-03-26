@@ -10,7 +10,7 @@ body {
 * {
     cursor: url("https://images.plurk.com/48oVAaqTfzZtTKVN4BzY9l.png"), auto;
 }
-#creditCard, #validation {
+#creditCard, #validation, #bank {
     font-size: 30px;
     text-align: center;
 }
@@ -25,10 +25,14 @@ body {
     line-height: normal;
 }
 
-#validation {
+#validation, #bank {
     margin-left: 20px;
     font-weight: bold;
     display: block;
+}
+
+#validation {
+    margin-top: 20px;
 }
 
 .container {
