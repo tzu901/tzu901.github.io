@@ -1,0 +1,41 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 80vh;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+* {
+    cursor: url("https://images.plurk.com/48oVAaqTfzZtTKVN4BzY9l.png"), auto;
+}
+#creditCard, #validation {
+    font-size: 30px;
+    text-align: center;
+}
+
+#creditCard {
+    margin: 50px 0;
+    padding: 10px;
+    background-color: rgba(239, 239, 239, 0.643);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    line-height: normal;
+}
+
+#validation {
+    margin-left: 20px;
+    font-weight: bold;
+    display: block;
+}
+
+.container {
+    width: fit-content; 
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center; 
+}

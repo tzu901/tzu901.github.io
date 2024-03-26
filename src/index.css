@@ -1,7 +1,7 @@
 html, body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
-    background: #c8daea; 
+    background: #E4E4EE; 
     margin-bottom: 60px, auto;
 }
 * {
@@ -10,7 +10,7 @@ html, body {
 }
 
 .header {
-    background-color: #f0dcdd;
+    background-color: #3F4168;
     text-align: center;
     padding-top: 10px;
     right: 0;
@@ -18,7 +18,7 @@ html, body {
 }
 
 .navigator {
-    background-color: #ddc5c1; 
+    background-color: #202045; 
     overflow: hidden;
 }
 .navigator a {
@@ -74,7 +74,7 @@ html, body {
 .circleLink:nth-child(5) { --rotate: 288deg; }
 
 .banner {
-    background-color:  #f0dcdd;
+    background-color:  #eba3a4;
     color: black;
     text-align: center;
     padding: 10px;
@@ -184,3 +184,42 @@ html, body {
     font-size: smaller;
   }
 }
+
+
+#loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.loader:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #3498db;
+  border-color: #3498db transparent #3498db transparent;
+  animation: loader 1.2s linear infinite;
+}
+@keyframes loader {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
