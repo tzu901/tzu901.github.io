@@ -8,16 +8,19 @@ function creditCardChecking() {
     console.log(creditCardInput.value);
 
     bank.textContent = ''
-    if (creditCard == '') {
-        validationResult.textContent = ''
+    validationResult.textContent = ''
+    if (creditCard === '') {
+        creditCardInput = null;
+        validationResult = null;
+        bank = null;
         return;
     }
-    // (creditCard[0] !== '3' && creditCard[0] !== '4' && creditCard[0] !== '5' || creditCard.length !== 16)
-    if (creditCard[0] !== '3' && creditCard[0] !== '4' && creditCard[0] !== '5') {
+    // || creditCard.length !== 16
+    if (creditCard[0] !== '3' && creditCard[0] !== '4' && creditCard[0] !== '5' ) {
         validationResult.textContent = 'Invalid';
         validationResult.style.color = 'red';
         console.log('Invalid');
-        console.log('Credit card number should start with 3, 4 or 5');
+        console.log('Credit card number should be 16 digits long and start with 3, 4 or 5');
         return;
     }
 
