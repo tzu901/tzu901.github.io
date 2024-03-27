@@ -43,3 +43,27 @@ body {
 h1 {
     text-align: center; 
 }
+
+
+@media (max-width: 768px) {
+    #creditCard {
+        width: 90%;
+        margin: 20px 0;
+        font-size: 20px;
+    }
+
+    h1, .container div {
+        font-size: 20px; 
+    }
+}
+
+@media (max-width: 480px) {
+    #creditCard {
+        width: 85%; 
+        padding: 8px; 
+    }
+
+    h1, .container div {
+        font-size: 18px; 
+    }
+}
