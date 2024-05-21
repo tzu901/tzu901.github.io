@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>YouBike Rentals Visualization</title>
+    <link rel="stylesheet" href="./src/main.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.25/"></script>
+    <script type="module" src="./src/main.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="controls">
+            <label for="dataSelect">Select Data:</label>
+            <select id="dataSelect">
+                <option value="weekday">Weekday</option>
+                <option value="weekend">Weekend</option>
+            </select>
+            <br><br>
+            <label for="thresholdSlider">Threshold: <span id="thresholdValue">800</span></label>
+            <input type="range" id="thresholdSlider" min="300" max="2000" step="100" value="800">
+        </div>
+        <div id="viewDiv"></div>
+        <div id="legend">
+            <p>Frequency</p>
+            <div><span class="legend-color" style="background-color: rgba(255, 0, 0, 0.7);"></span> High Frequency</div>
+            <div><span class="legend-color" style="background-color: rgba(255, 165, 0, 0.7);"></span> Medium Frequency</div>
+            <div><span class="legend-color" style="background-color: rgba(255, 255, 0, 0.7);"></span> Low Frequency</div>
+        </div>
+    </div>
+</body>
+
+</html>
