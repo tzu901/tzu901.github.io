@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Teachable Machine — 圖片上傳分類</title>
+  <!-- 先載 tfjs，再載 teachablemachine-image -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"
+          crossorigin="anonymous"
+          onload="console.log('tfjs loaded', !!window.tf)"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.4/dist/teachablemachine-image.min.js"
+          crossorigin="anonymous"
+          onload="console.log('tmImage loaded', !!window.tmImage)"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; }
+    #preview { max-width: 360px; max-height: 360px; display:block; margin-top:8px; }
+    #label-container { margin-top:12px; white-space:pre-line; }
+    progress { width: 200px; }
+  </style>
+</head>
+<body>
+  <h1>Teachable Machine — 圖片上傳分類</h1>
+
+  <input id="file" type="file" accept="image/*">
+  <img id="preview" alt="preview">
+  <button id="classify" disabled>分類</button>
+  <div id="label-container"></div>
+
+  <script>
+    const MODEL_BASE = "./src/model/";  // 模型資料夾路徑
+    let model = null, imgReady = false, blobUrl = null;
+
+    const fileInput = document.getElementById('file');
+    const img = document.getElementById('preview');
+    const btn = document.getElementById('classify');
+    const out = document.getElementById('label-container');
+
+    // 等 tmImage 可用後再載入模型
+    (async () => {
+      try {
+        await waitFor(() => !!window.tmImage, 8000, 100);
+        model = await tmImage.load(MODEL_BASE + "model.json", MODEL_BASE + "metadata.json");
+        console.log("model loaded");
+        maybeEnableButton();
+      } catch (e) {
+        console.error(e);
+        out.textContent = "載入模型失敗或 tmImage 未載入。請確認 ./src/model/ 下有 model.json / metadata.json / weights.bin。";
+      }
+    })();
+
+    // 上傳後預覽
+    fileInput.addEventListener('change', async (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+      blobUrl = URL.createObjectURL(f);
+      img.src = blobUrl;
+      imgReady = false;
+      out.textContent = "";
+
+      await new Promise((res, rej) => {
+        img.onload = () => { imgReady = true; res(); };
+        img.onerror = rej;
+      });
+
+      maybeEnableButton();
+    });
+
+    function maybeEnableButton() {
+      btn.disabled = !(model && imgReady);
+    }
+
+    // 點擊分類才推論
+    btn.addEventListener('click', async () => {
+      if (!model) { out.textContent = "模型尚未載入。"; return; }
+      if (!imgReady) { out.textContent = "圖片尚未載入。"; return; }
+
+      btn.disabled = true;
+      out.textContent = "推論中…";
+
+      try {
+        const prediction = await model.predict(img);
+        prediction.sort((a, b) => b.probability - a.probability);
+
+        // 顯示結果
+        out.innerHTML = "";
+        const top = prediction[0];
+        out.insertAdjacentHTML("beforeend",
+          `<h3>Top: ${top.className} (${(top.probability*100).toFixed(1)}%)</h3>`
+        );
+
+        prediction.forEach(p => {
+          const div = document.createElement("div");
+          div.innerHTML = `${p.className} <progress max="1" value="${p.probability}"></progress> ${(p.probability*100).toFixed(1)}%`;
+          out.appendChild(div);
+        });
+      } catch (e) {
+        console.error(e);
+        out.textContent = "推論失敗，請檢查模型檔或瀏覽器主控台。";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    // 工具：等待條件成立
+    function waitFor(condFn, timeout=5000, interval=50) {
+      return new Promise((res, rej) => {
+        const start = Date.now();
+        const t = setInterval(() => {
+          if (condFn()) { clearInterval(t); res(); }
+          else if (Date.now() - start > timeout) { clearInterval(t); rej(new Error('timeout')); }
+        }, interval);
+      });
+    }
+
+    // 釋放暫存 URL
+    window.addEventListener('beforeunload', () => {
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    });
+  </script>
+</body>
+</html>
