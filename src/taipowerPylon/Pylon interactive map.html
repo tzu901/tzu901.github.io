@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>台電電塔選址與分析</title>
     
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/georaster@1.6.0/dist/georaster.browser.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/georaster-layer-for-leaflet@4.1.2/dist/georaster-layer-for-leaflet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
@@ -110,6 +109,16 @@
         justify-content: space-between;
         margin-top: 3px;
       }
+      .risk-legend__item { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+      .risk-legend__swatch { width: 16px; height: 12px; border: 1px solid rgba(23,50,77,0.3); }
+      .tower-chart-control {
+        width: 310px; padding: 8px 10px; background: rgba(255,255,255,0.95);
+        border: 1px solid #b8c4cc; border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+        font: 12px/1.3 Arial, sans-serif; color: #17324d;
+      }
+      .leaflet-bottom .tower-chart-control { margin-bottom: 140px !important; }
+      .tower-chart-control summary { cursor: pointer; font-weight: 700; }
+      .tower-chart-control canvas { display: block; margin-top: 8px; max-width: 100%; }
     </style>
 </head>
 <body>
@@ -136,7 +145,6 @@
       <hr style="border:0;border-top:1px solid #dddddd;margin:7px 0;">
       <div><span style="display:inline-block;width:24px;height:4px;background:#c62828;margin-right:7px;vertical-align:middle;"></span>輸電網路</div>
       <div><span style="display:inline-block;width:20px;height:9px;background:rgba(245,158,11,.40);border:1px solid #d97706;margin-right:7px;"></span>50 m 植被分析帶</div>
-      <div><span style="display:inline-block;width:20px;height:9px;background:rgba(47,125,67,.25);border:1px solid #2f7d43;margin-right:7px;"></span>250 m 生態背景帶</div>
     </div>
     
 </body>
@@ -216,43 +224,12 @@
             );
         
     
-            var feature_group_f6266e7747fae16f173b233249847d3e = L.featureGroup(
-                {
-}
-            );
-        
-    
-        function geo_json_7926427cdd0ce1185be5ab7f626aee7b_styler(feature) {
-            switch(feature.id) {
-                default:
-                    return {"color": "#2f7d43", "fillColor": "#2f7d43", "fillOpacity": 0.17, "weight": 1.5};
-            }
-        }
-
-        function geo_json_7926427cdd0ce1185be5ab7f626aee7b_onEachFeature(feature, layer) {
-
-            layer.on({
-            });
-        };
-        var geo_json_7926427cdd0ce1185be5ab7f626aee7b = L.geoJson(null, {
-                onEachFeature: geo_json_7926427cdd0ce1185be5ab7f626aee7b_onEachFeature,
-            
-                style: geo_json_7926427cdd0ce1185be5ab7f626aee7b_styler,
-            ...{
-}
-        });
-
-        function geo_json_7926427cdd0ce1185be5ab7f626aee7b_add (data) {
-            geo_json_7926427cdd0ce1185be5ab7f626aee7b
-                .addData(data);
-        }
-            geo_json_7926427cdd0ce1185be5ab7f626aee7b_add({"features": [{"geometry": {"coordinates": [[[121.634124818405, 24.996469514504632], [121.63659711523164, 24.995012857281086], [121.63770968806351, 24.994297980872712], [121.63944081089144, 24.993249280617047], [121.64162451337906, 24.9918066701099], [121.64543961198316, 24.989381635579004], [121.64925368360538, 24.985743509166376], [121.6548938637726, 24.983401452335595], [121.6528405709971, 24.97929373932549], [121.6463321610117, 24.98199627513427], [121.64220063329952, 24.98593714549556], [121.6387543296626, 24.988127714746426], [121.63661543184443, 24.989540704669572], [121.63491135446526, 24.9905730046716], [121.6338245271072, 24.991271328505274], [121.63145422308445, 24.992667872219688], [121.62531092588667, 24.996217273277363], [121.6279629154429, 25.000029713620528], [121.634124818405, 24.996469514504632]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
 
         
     
-            geo_json_7926427cdd0ce1185be5ab7f626aee7b.bindTooltip(
+            /* Legacy background removed.
                 `<div>
-                     250 m 生物多樣性背景帶
+                     Legacy background removed.
                  </div>`,
                 {
   "sticky": true,
@@ -271,16 +248,16 @@
             
         
 
-        geo_json_7926427cdd0ce1185be5ab7f626aee7b.bindPopup(popup_1ecec6486b6700085fceee3dbe037df0)
+        removed_background.bindPopup(popup_1ecec6486b6700085fceee3dbe037df0)
         ;
 
         
     
     
-            geo_json_7926427cdd0ce1185be5ab7f626aee7b.addTo(feature_group_f6266e7747fae16f173b233249847d3e);
+            removed_background.addTo(removed_background_group);
         
     
-            feature_group_f6266e7747fae16f173b233249847d3e.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+            */
         
     
             var feature_group_214aef448f441e4cb148d9066a2a2bd3 = L.featureGroup(
@@ -998,7 +975,6 @@
                 },
                 overlays :  {
                     "\u885b\u661f\u5730\u540d\u6a19\u8a3b" : tile_layer_fb963aca62d5a28077832cab7bc62cb8,
-                    "250 m \u751f\u7269\u591a\u6a23\u6027\u80cc\u666f\u5e36" : feature_group_f6266e7747fae16f173b233249847d3e,
                     "50 m \u690d\u88ab\u98a8\u96aa\u5206\u6790\u5e36" : feature_group_214aef448f441e4cb148d9066a2a2bd3,
                     "345 kV \u8f38\u96fb\u7dda\u8de8\u8ddd" : feature_group_ae551147886aed3b040ee4fc5448a5d7,
                     "\u652f\u6490\u7bc0\u9ede P01\u2013P09" : feature_group_b5e416948bf7f6c778f930061b97edf4,
@@ -1127,6 +1103,137 @@
                 .catch(function(error) {
                     console.error("Unable to load 2026 CHM GeoTIFF", error);
                     document.querySelector("#chm-opacity-status").textContent = "GeoTIFF load failed";
+                });
+
+            var chm_risk_2026_layer = null;
+            var chm_risk_2026_opacity = 0.75;
+            var chm_risk_2026_url = "assets/taipower_chm_2026_50m_corridor.tif";
+            var chm_risk_colors = ["#fff7bc", "#fee391", "#fec44f", "#fe9929", "#ec7014", "#cc4c02"];
+            var chm_risk_labels = ["0\u2013<10 m", "10\u2013<20 m", "20\u2013<30 m", "30\u2013<40 m", "40\u2013<50 m", "\u226550 m"];
+
+            function riskColor(values) {
+                var value = values && values[0];
+                if (!Number.isFinite(value) || value <= 0 || value === -9999) return "rgba(0,0,0,0)";
+                return chm_risk_colors[Math.min(Math.floor(value / 10), chm_risk_colors.length - 1)];
+            }
+
+            var ChmRiskOpacityControl = L.Control.extend({
+                options: { position: "topright" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control chm-opacity-control");
+                    container.innerHTML =
+                        '<div class="chm-opacity-control__title"><span>50 m risk TIFF opacity</span><span id="chm-risk-opacity-value">75%</span></div>' +
+                        '<input id="chm-risk-opacity-slider" type="range" min="0" max="100" value="75" step="1" aria-label="50 m risk TIFF opacity" disabled>' +
+                        '<div id="chm-risk-opacity-status" style="margin-top:4px;color:#52616b;">Loading GeoTIFF...</div>';
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    L.DomEvent.on(container.querySelector("#chm-risk-opacity-slider"), "input", function(event) {
+                        chm_risk_2026_opacity = Number(event.target.value) / 100;
+                        if (chm_risk_2026_layer) chm_risk_2026_layer.setOpacity(chm_risk_2026_opacity);
+                        container.querySelector("#chm-risk-opacity-value").textContent = event.target.value + "%";
+                    });
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new ChmRiskOpacityControl());
+
+            var ChmRiskLegendControl = L.Control.extend({
+                options: { position: "bottomright" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control chm-legend");
+                    container.innerHTML = '<div class="chm-legend__title">50 m risk TIFF legend \u2014 tree height (m)</div>' +
+                        chm_risk_labels.map(function(label, index) {
+                            return '<div class="risk-legend__item"><span class="risk-legend__swatch" style="background:' + chm_risk_colors[index] + '"></span>' + label + '</div>';
+                        }).join("");
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new ChmRiskLegendControl());
+
+            fetch(chm_risk_2026_url)
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Risk GeoTIFF request failed: " + response.status);
+                    return response.arrayBuffer();
+                })
+                .then(function(arrayBuffer) { return parseGeoraster(arrayBuffer); })
+                .then(function(georaster) {
+                    chm_risk_2026_layer = new GeoRasterLayer({
+                        georaster: georaster, opacity: chm_risk_2026_opacity, pixelValuesToColorFn: riskColor,
+                        resolution: 256, resampleMethod: "bilinear"
+                    });
+                    layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(chm_risk_2026_layer, "50 m \u690d\u88ab\u98a8\u96aa TIFF");
+                    chm_risk_2026_layer.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+                    document.querySelector("#chm-risk-opacity-slider").disabled = false;
+                    document.querySelector("#chm-risk-opacity-status").textContent = "GeoTIFF loaded";
+                })
+                .catch(function(error) {
+                    console.error("Unable to load 50 m risk GeoTIFF", error);
+                    document.querySelector("#chm-risk-opacity-status").textContent = "GeoTIFF load failed";
+                });
+
+            var TowerChartControl = L.Control.extend({
+                options: { position: "bottomleft" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control tower-chart-control");
+                    container.innerHTML = '<details open><summary>2026 50 m tower maximum tree height (m)</summary><div id="tower-chart-status">Loading tower statistics...</div><canvas id="tower-height-chart" aria-label="2026 50 m tower maximum tree height chart"></canvas></details>';
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new TowerChartControl());
+
+            fetch("assets/tower_chm_2026_50m_stats.json")
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Tower statistics request failed: " + response.status);
+                    return response.json();
+                })
+                .then(function(stats) {
+                    var towers = (Array.isArray(stats.towers) ? stats.towers : [])
+                        .slice()
+                        .sort(function(a, b) { return a.sequence - b.sequence; });
+                    var towerMarkers = L.featureGroup();
+                    towers.forEach(function(tower) {
+                        var heightIsValid = Number.isFinite(tower.max_height_m);
+                        var color = heightIsValid ? chm_risk_colors[tower.height_class_index] || "#7f8c8d" : "#7f8c8d";
+                        L.circleMarker([tower.latitude, tower.longitude], {
+                            radius: 7, color: color, fillColor: color, fillOpacity: 0.9, weight: 1
+                        }).bindPopup(
+                            "<strong>Point ID:</strong> " + tower.point_id + "<br>" +
+                            "<strong>50 m \u6700\u5927\u6a39\u9ad8:</strong> " + (heightIsValid ? tower.max_height_m + " m" : "No valid data") + "<br>" +
+                            "<strong>\u9ad8\u5ea6\u7d1a\u8ddd:</strong> " + tower.height_class + "<br>" +
+                            "<strong>\u6709\u6548\u50cf\u5143\u6578:</strong> " + tower.valid_pixel_count
+                        ).addTo(towerMarkers);
+                    });
+                    layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(towerMarkers, "\u96fb\u5854 50 m \u6700\u5927\u6a39\u9ad8\u7d1a\u8ddd");
+                    towerMarkers.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+                    var hasValidHeights = towers.some(function(tower) { return Number.isFinite(tower.max_height_m); });
+                    var status = document.querySelector("#tower-chart-status");
+                    if (!hasValidHeights) { status.textContent = "No valid data"; return; }
+                    status.remove();
+                    var canvas = document.querySelector("#tower-height-chart");
+                    new Chart(canvas, {
+                        type: "bar",
+                        data: {
+                            labels: towers.map(function(tower) { return tower.point_id; }),
+                            datasets: [{
+                                label: "Maximum tree height (m)",
+                                data: towers.map(function(tower) { return Number.isFinite(tower.max_height_m) ? tower.max_height_m : null; }),
+                                backgroundColor: towers.map(function(tower) { return Number.isFinite(tower.max_height_m) ? chm_risk_colors[tower.height_class_index] || "#7f8c8d" : "#7f8c8d"; })
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, title: { display: true, text: "m" } } }
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    console.error("Unable to load tower statistics", error);
+                    document.querySelector("#tower-chart-status").textContent = "Tower statistics load failed";
                 });
 
         
