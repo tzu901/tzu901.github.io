@@ -1,0 +1,113 @@
+{
+  "year": 2026,
+  "radius_m": 50.0,
+  "source": "NewTaipei_Shenmei_Dongshan_345kV_3km_prediction_2026.tif",
+  "class_breaks_m": [
+    0.0,
+    10.0,
+    20.0,
+    30.0,
+    40.0,
+    50.0
+  ],
+  "class_labels": [
+    "0–<10 m",
+    "10–<20 m",
+    "20–<30 m",
+    "30–<40 m",
+    "40–<50 m",
+    "≥50 m"
+  ],
+  "towers": [
+    {
+      "point_id": "P01",
+      "sequence": 1,
+      "longitude": 121.6266369,
+      "latitude": 24.9981235,
+      "max_height_m": 35.45232391357422,
+      "valid_pixel_count": 107,
+      "height_class_index": 3,
+      "height_class": "30–<40 m"
+    },
+    {
+      "point_id": "P02",
+      "sequence": 2,
+      "longitude": 121.6327895,
+      "latitude": 24.9945687,
+      "max_height_m": 36.38654327392578,
+      "valid_pixel_count": 108,
+      "height_class_index": 3,
+      "height_class": "30–<40 m"
+    },
+    {
+      "point_id": "P03",
+      "sequence": 3,
+      "longitude": 121.6352108,
+      "latitude": 24.9931421,
+      "max_height_m": 40.26469039916992,
+      "valid_pixel_count": 110,
+      "height_class_index": 4,
+      "height_class": "40–<50 m"
+    },
+    {
+      "point_id": "P04",
+      "sequence": 4,
+      "longitude": 121.6363105,
+      "latitude": 24.9924355,
+      "max_height_m": 35.54502487182617,
+      "valid_pixel_count": 111,
+      "height_class_index": 3,
+      "height_class": "30–<40 m"
+    },
+    {
+      "point_id": "P05",
+      "sequence": 5,
+      "longitude": 121.6380281,
+      "latitude": 24.991395,
+      "max_height_m": 31.004638671875,
+      "valid_pixel_count": 108,
+      "height_class_index": 3,
+      "height_class": "30–<40 m"
+    },
+    {
+      "point_id": "P06",
+      "sequence": 6,
+      "longitude": 121.6401894,
+      "latitude": 24.9899672,
+      "max_height_m": 32.72408676147461,
+      "valid_pixel_count": 105,
+      "height_class_index": 3,
+      "height_class": "30–<40 m"
+    },
+    {
+      "point_id": "P07",
+      "sequence": 7,
+      "longitude": 121.6438201,
+      "latitude": 24.9876594,
+      "max_height_m": 39.691932678222656,
+      "valid_pixel_count": 109,
+      "height_class_index": 3,
+      "height_class": "30–<40 m"
+    },
+    {
+      "point_id": "P08",
+      "sequence": 8,
+      "longitude": 121.6477929,
+      "latitude": 24.9838699,
+      "max_height_m": 42.560997009277344,
+      "valid_pixel_count": 111,
+      "height_class_index": 4,
+      "height_class": "40–<50 m"
+    },
+    {
+      "point_id": "P09",
+      "sequence": 9,
+      "longitude": 121.6538672,
+      "latitude": 24.9813476,
+      "max_height_m": 45.141414642333984,
+      "valid_pixel_count": 107,
+      "height_class_index": 4,
+      "height_class": "40–<50 m"
+    }
+  ]
+}
