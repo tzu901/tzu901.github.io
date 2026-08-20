@@ -145,7 +145,6 @@
       <div>345 kV｜選段長度：約 3.341 km</div>
       <hr style="border:0;border-top:1px solid #dddddd;margin:7px 0;">
       <div><span style="display:inline-block;width:24px;height:4px;background:#c62828;margin-right:7px;vertical-align:middle;"></span>輸電網路</div>
-      <div><span style="display:inline-block;width:20px;height:9px;background:rgba(245,158,11,.40);border:1px solid #d97706;margin-right:7px;"></span>50 m 植被分析帶</div>
     </div>
     
 </body>
@@ -188,9 +187,6 @@
             );
         
     
-            tile_layer_0ba96ba654612aad73f349e11ca29920.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
-        
-    
             var tile_layer_a04f7b2167a447fa1986aa32eee19d36 = L.tileLayer(
                 "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                 {
@@ -206,6 +202,9 @@
 }
 
             );
+        
+    
+            tile_layer_a04f7b2167a447fa1986aa32eee19d36.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
         
     
             var tile_layer_fb963aca62d5a28077832cab7bc62cb8 = L.tileLayer(
@@ -261,71 +260,6 @@
             */
         
     
-            var feature_group_214aef448f441e4cb148d9066a2a2bd3 = L.featureGroup(
-                {
-}
-            );
-        
-    
-        function geo_json_f873cf24f70453759cd01f42eb346142_styler(feature) {
-            switch(feature.id) {
-                default:
-                    return {"color": "#d97706", "fillColor": "#f59e0b", "fillOpacity": 0.22, "weight": 2};
-            }
-        }
-
-        function geo_json_f873cf24f70453759cd01f42eb346142_onEachFeature(feature, layer) {
-
-            layer.on({
-            });
-        };
-        var geo_json_f873cf24f70453759cd01f42eb346142 = L.geoJson(null, {
-                onEachFeature: geo_json_f873cf24f70453759cd01f42eb346142_onEachFeature,
-            
-                style: geo_json_f873cf24f70453759cd01f42eb346142_styler,
-            ...{
-}
-        });
-
-        function geo_json_f873cf24f70453759cd01f42eb346142_add (data) {
-            geo_json_f873cf24f70453759cd01f42eb346142
-                .addData(data);
-        }
-            geo_json_f873cf24f70453759cd01f42eb346142_add({"features": [{"geometry": {"coordinates": [[[121.63305656036151, 24.994948863963156], [121.63548805965905, 24.99351625259341], [121.63659033421021, 24.992807997331106], [121.63831063875926, 24.991765857300575], [121.64047641923241, 24.990335095233508], [121.64414399877387, 24.988003848629962], [121.64808505315152, 24.98424462308933], [121.65407252997275, 24.98175837113429], [121.65366187141801, 24.98093682853214], [121.64750074863314, 24.98349517628268], [121.64349620303744, 24.987314950613015], [121.63990238248924, 24.989599304160727], [121.63774556295017, 24.99102414211089], [121.63603066749091, 24.992063002090667], [121.63493354203449, 24.99276794683804], [121.63252244129804, 24.994188535505806], [121.62637170187114, 24.99774225570353], [121.62690209978204, 24.998504743772365], [121.63305656036151, 24.994948863963156]]], "type": "Polygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
-
-        
-    
-            geo_json_f873cf24f70453759cd01f42eb346142.bindTooltip(
-                `<div>
-                     50 m 植被風險分析帶
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-        var popup_1c979645d00270f8d28e3f5b69219a8a = L.popup({
-  "maxWidth": 320,
-});
-
-        
-            
-                var html_397c8019bebc3e77e65b1ece69025db9 = $(`<div id="html_397c8019bebc3e77e65b1ece69025db9" style="width: 100.0%; height: 100.0%;"></div>`)[0];
-                popup_1c979645d00270f8d28e3f5b69219a8a.setContent(html_397c8019bebc3e77e65b1ece69025db9);
-            
-        
-
-        geo_json_f873cf24f70453759cd01f42eb346142.bindPopup(popup_1c979645d00270f8d28e3f5b69219a8a)
-        ;
-
-        
-    
-    
-            geo_json_f873cf24f70453759cd01f42eb346142.addTo(feature_group_214aef448f441e4cb148d9066a2a2bd3);
-        
-    
-            feature_group_214aef448f441e4cb148d9066a2a2bd3.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
         
     
             var feature_group_ae551147886aed3b040ee4fc5448a5d7 = L.featureGroup(
@@ -988,7 +922,6 @@
                 },
                 overlays :  {
                     "\u885b\u661f\u5730\u540d\u6a19\u8a3b" : tile_layer_fb963aca62d5a28077832cab7bc62cb8,
-                    "50 m \u690d\u88ab\u98a8\u96aa\u5206\u6790\u5e36" : feature_group_214aef448f441e4cb148d9066a2a2bd3,
                     "345 kV \u8f38\u96fb\u7dda\u8de8\u8ddd" : feature_group_ae551147886aed3b040ee4fc5448a5d7,
                     "\u652f\u6490\u7bc0\u9ede P01\u2013P09" : feature_group_b5e416948bf7f6c778f930061b97edf4,
                 },
