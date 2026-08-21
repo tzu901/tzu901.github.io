@@ -166,6 +166,13 @@
             );
             L.control.scale().addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
 
+            var chm_2026_pane = map_67ae7f970dd677e2a1239d0560e5ae38.createPane("taipower-chm-2026-pane");
+            chm_2026_pane.classList.add("taipower-chm-2026-pane");
+            chm_2026_pane.style.zIndex = 350;
+            var risk_2026_pane = map_67ae7f970dd677e2a1239d0560e5ae38.createPane("taipower-risk-2026-pane");
+            risk_2026_pane.classList.add("taipower-risk-2026-pane");
+            risk_2026_pane.style.zIndex = 360;
+
             
 
         
@@ -1059,6 +1066,8 @@
                         chm_2026_layer = new GeoRasterLayer({
                             georaster: georaster,
                             opacity: chm_2026_opacity,
+                            className: "taipower-chm-2026-raster",
+                            pane: "taipower-chm-2026-pane",
                             pixelValuesToColorFn: function(values) {
                                 return chm_2026_color(values, min, max, noDataValue);
                             },
@@ -1091,11 +1100,14 @@
             });
 
             var chm_risk_2026_layer = null;
+            var chm_risk_2026_proxy = L.layerGroup();
             var chm_risk_2026_opacity = 0.75;
             var chm_risk_2026_opacity_frame = null;
             var chm_risk_2026_url = "assets/taipower_chm_2026_50m_corridor.tif";
             var chm_risk_colors = ["#fff7bc", "#fee391", "#fec44f", "#fe9929", "#ec7014", "#cc4c02"];
             var chm_risk_labels = ["0\u2013<10 m", "10\u2013<20 m", "20\u2013<30 m", "30\u2013<40 m", "40\u2013<50 m", "\u226550 m"];
+            layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(chm_risk_2026_proxy, "50 m \u690d\u88ab\u98a8\u96aa TIFF");
+            chm_risk_2026_proxy.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
 
             function riskColor(values) {
                 var value = values && values[0];
@@ -1124,7 +1136,7 @@
             }
 
             map_67ae7f970dd677e2a1239d0560e5ae38.on("click", function(event) {
-                if (!chm_risk_2026_layer || !map_67ae7f970dd677e2a1239d0560e5ae38.hasLayer(chm_risk_2026_layer)) return;
+                if (!chm_risk_2026_layer || !map_67ae7f970dd677e2a1239d0560e5ae38.hasLayer(chm_risk_2026_proxy)) return;
                 var value = riskHeightAtLatLng(event.latlng);
                 if (value === null) return;
                 var maxHeightM = Math.round(value);
@@ -1190,14 +1202,15 @@
                 .then(function(georaster) {
                     chm_risk_2026_layer = new GeoRasterLayer({
                         georaster: georaster, opacity: chm_risk_2026_opacity, pixelValuesToColorFn: riskColor,
+                        className: "taipower-risk-2026-raster",
+                        pane: "taipower-risk-2026-pane",
                         resolution: 128,
                         resampleMethod: "nearest",
                         updateWhenIdle: true,
                         updateWhenZooming: false,
                         keepBuffer: 2
                     });
-                    layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(chm_risk_2026_layer, "50 m \u690d\u88ab\u98a8\u96aa TIFF");
-                    chm_risk_2026_layer.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+                    chm_risk_2026_proxy.addLayer(chm_risk_2026_layer);
                     document.querySelector("#chm-risk-opacity-slider").disabled = false;
                     document.querySelector("#chm-risk-opacity-status").textContent = "GeoTIFF loaded — corridor classes ready";
                 })
