@@ -173,6 +173,41 @@
             risk_2026_pane.classList.add("taipower-risk-2026-pane");
             risk_2026_pane.style.zIndex = 360;
 
+            function setRasterLayerVisibility(layer, visible) {
+                if (!layer || !layer._container) return;
+                layer._container.style.display = visible ? "" : "none";
+                layer._container.style.pointerEvents = visible ? "" : "none";
+            }
+
+            var RasterVisibilityProxy = L.Layer.extend({
+                initialize: function() {
+                    this._rasterLayer = null;
+                    this._visible = false;
+                },
+                onAdd: function(map) {
+                    this._map = map;
+                    this._visible = true;
+                    if (this._rasterLayer) {
+                        if (!map.hasLayer(this._rasterLayer)) map.addLayer(this._rasterLayer);
+                        setRasterLayerVisibility(this._rasterLayer, true);
+                    }
+                },
+                onRemove: function() {
+                    this._visible = false;
+                    setRasterLayerVisibility(this._rasterLayer, false);
+                    this._map = null;
+                },
+                attachRaster: function(layer) {
+                    this._rasterLayer = layer;
+                    if (this._map && !this._map.hasLayer(layer)) this._map.addLayer(layer);
+                    setRasterLayerVisibility(layer, this._visible);
+                }
+            });
+
+            function createRasterVisibilityProxy() {
+                return new RasterVisibilityProxy();
+            }
+
             
 
         
@@ -951,7 +986,7 @@
                 "#440154", "#482878", "#3e4989", "#31688e", "#26828e",
                 "#1f9e89", "#35b779", "#6ece58", "#b5de2b", "#fde725"
             ];
-            var chm_2026_proxy = L.layerGroup();
+            var chm_2026_proxy = createRasterVisibilityProxy();
             var chm_2026_loading = null;
             layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(chm_2026_proxy, "2026 CHM");
 
@@ -1075,9 +1110,10 @@
                             resampleMethod: "bilinear",
                             updateWhenIdle: true,
                             updateWhenZooming: false,
-                            keepBuffer: 2
+                            keepBuffer: 2,
+                            caching: false
                         });
-                        chm_2026_proxy.addLayer(chm_2026_layer);
+                        chm_2026_proxy.attachRaster(chm_2026_layer);
                         document.querySelector("#chm-opacity-slider").disabled = false;
                         document.querySelector("#chm-opacity-status").textContent = "GeoTIFF loaded";
                         document.querySelector("#chm-legend-max").textContent = chm_2026_format_height(max);
@@ -1100,7 +1136,7 @@
             });
 
             var chm_risk_2026_layer = null;
-            var chm_risk_2026_proxy = L.layerGroup();
+            var chm_risk_2026_proxy = createRasterVisibilityProxy();
             var chm_risk_2026_opacity = 0.75;
             var chm_risk_2026_opacity_frame = null;
             var chm_risk_2026_url = "assets/taipower_chm_2026_50m_corridor.tif";
@@ -1208,9 +1244,10 @@
                         resampleMethod: "nearest",
                         updateWhenIdle: true,
                         updateWhenZooming: false,
-                        keepBuffer: 2
+                        keepBuffer: 2,
+                        caching: false
                     });
-                    chm_risk_2026_proxy.addLayer(chm_risk_2026_layer);
+                    chm_risk_2026_proxy.attachRaster(chm_risk_2026_layer);
                     document.querySelector("#chm-risk-opacity-slider").disabled = false;
                     document.querySelector("#chm-risk-opacity-status").textContent = "GeoTIFF loaded — corridor classes ready";
                 })
