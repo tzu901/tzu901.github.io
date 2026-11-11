@@ -1,0 +1,12 @@
+# Analysis and build helpers are not part of the deployable site.
+*.py
+*.pyc
+__pycache__/
+
+# The map reads the GeoTIFF directly; this generated preview is not deployed.
+*.png
+
+# Vector and tabular analysis exports do not belong in the Web package.
+*.csv
+*.geojson
+*.gpkg

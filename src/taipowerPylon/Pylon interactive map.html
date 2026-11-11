@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/georaster@1.6.0/dist/georaster.browser.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/georaster-layer-for-leaflet@4.1.2/dist/georaster-layer-for-leaflet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_67ae7f970dd677e2a1239d0560e5ae38 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css"/>
+    
+    <style>
+      html, body { width: 100%; height: 100%; margin: 0; }
+    </style>
+    
+    <style id="chm-opacity-control-style">
+      .chm-opacity-control {
+        min-width: 190px;
+        padding: 8px 10px;
+        background: rgba(255,255,255,0.95);
+        border: 1px solid #b8c4cc;
+        border-radius: 6px;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+        font: 12px/1.3 Arial, sans-serif;
+      }
+      .chm-opacity-control__title {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 5px;
+        font-weight: 700;
+        color: #17324d;
+      }
+      .chm-opacity-control input[type="range"] {
+        width: 100%;
+        accent-color: #35b779;
+      }
+      .chm-legend {
+        min-width: 220px;
+        padding: 8px 10px;
+        background: rgba(255,255,255,0.95);
+        border: 1px solid #b8c4cc;
+        border-radius: 6px;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+        font: 12px/1.3 Arial, sans-serif;
+        color: #17324d;
+      }
+      .chm-legend__title {
+        margin-bottom: 6px;
+        font-weight: 700;
+      }
+      .chm-legend__gradient {
+        height: 13px;
+        border: 1px solid rgba(23,50,77,0.45);
+        background: linear-gradient(to right, #440154, #482878, #3e4989, #31688e, #26828e, #1f9e89, #35b779, #6ece58, #b5de2b, #fde725);
+      }
+      .chm-legend__labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3px;
+      }
+      .risk-legend__item { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+      .risk-legend__swatch { width: 16px; height: 12px; border: 1px solid rgba(23,50,77,0.3); }
+      .tower-chart-control {
+        width: 310px; padding: 8px 10px; background: rgba(255,255,255,0.95);
+        border: 1px solid #b8c4cc; border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+        font: 12px/1.3 Arial, sans-serif; color: #17324d;
+      }
+      .leaflet-bottom .tower-chart-control { margin-bottom: 180px !important; }
+      .tower-chart-control summary { cursor: pointer; font-weight: 700; }
+      .tower-chart-control canvas { display: block; margin-top: 8px; max-width: 100%; }
+    </style>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_67ae7f970dd677e2a1239d0560e5ae38" ></div>
+        
+    
+    <div style="
+        position: fixed;
+        left: 5px;
+        bottom: 45px;
+        z-index: 9999;
+        width: 285px;
+        background: rgba(255,255,255,0.94);
+        border: 1px solid #bbbbbb;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        line-height: 1.45;
+        box-shadow: 0 1px 7px rgba(0,0,0,0.18);">
+      <div style="font-weight:700;font-size:14px;margin-bottom:5px;">新北市深美～冬山線</div>
+      <div>345 kV｜選段長度：約 3.341 km</div>
+      <hr style="border:0;border-top:1px solid #dddddd;margin:7px 0;">
+      <div><span style="display:inline-block;width:24px;height:4px;background:#c62828;margin-right:7px;vertical-align:middle;"></span>輸電網路</div>
+    </div>
+    
+</body>
+<script>
+    
+    
+            var map_67ae7f970dd677e2a1239d0560e5ae38 = L.map(
+                "map_67ae7f970dd677e2a1239d0560e5ae38",
+                {
+                    center: [24.990278766666663, 121.63940504444446],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": true,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+
+            var chm_2026_pane = map_67ae7f970dd677e2a1239d0560e5ae38.createPane("taipower-chm-2026-pane");
+            chm_2026_pane.classList.add("taipower-chm-2026-pane");
+            chm_2026_pane.style.zIndex = 350;
+            var risk_2026_pane = map_67ae7f970dd677e2a1239d0560e5ae38.createPane("taipower-risk-2026-pane");
+            risk_2026_pane.classList.add("taipower-risk-2026-pane");
+            risk_2026_pane.style.zIndex = 360;
+
+            function setRasterLayerVisibility(layer, visible) {
+                if (!layer || !layer._container) return;
+                layer._container.style.display = visible ? "" : "none";
+                layer._container.style.pointerEvents = visible ? "" : "none";
+            }
+
+            var RasterVisibilityProxy = L.Layer.extend({
+                initialize: function() {
+                    this._rasterLayer = null;
+                    this._visible = false;
+                },
+                onAdd: function(map) {
+                    this._map = map;
+                    this._visible = true;
+                    if (this._rasterLayer) {
+                        if (!map.hasLayer(this._rasterLayer)) map.addLayer(this._rasterLayer);
+                        setRasterLayerVisibility(this._rasterLayer, true);
+                    }
+                },
+                onRemove: function() {
+                    this._visible = false;
+                    setRasterLayerVisibility(this._rasterLayer, false);
+                    this._map = null;
+                },
+                attachRaster: function(layer) {
+                    this._rasterLayer = layer;
+                    if (this._map && !this._map.hasLayer(layer)) this._map.addLayer(layer);
+                    setRasterLayerVisibility(layer, this._visible);
+                }
+            });
+
+            function createRasterVisibilityProxy() {
+                return new RasterVisibilityProxy();
+            }
+
+            
+
+        
+    
+            var tile_layer_0ba96ba654612aad73f349e11ca29920 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u00a9 OpenStreetMap contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            var tile_layer_a04f7b2167a447fa1986aa32eee19d36 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "Tiles \u00a9 Esri \u2014 Sources: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_a04f7b2167a447fa1986aa32eee19d36.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+        
+    
+            var tile_layer_fb963aca62d5a28077832cab7bc62cb8 = L.tileLayer(
+                "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "Reference labels \u00a9 Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 0.95,
+}
+
+            );
+        
+    
+
+        
+    
+            /* Legacy background removed.
+                `<div>
+                     Legacy background removed.
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+        var popup_1ecec6486b6700085fceee3dbe037df0 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_811c1708fdaeee774a3bcadd545b6966 = $(`<div id="html_811c1708fdaeee774a3bcadd545b6966" style="width: 100.0%; height: 100.0%;"><br>此為分析尺度，不代表法定路權。</div>`)[0];
+                popup_1ecec6486b6700085fceee3dbe037df0.setContent(html_811c1708fdaeee774a3bcadd545b6966);
+            
+        
+
+        removed_background.bindPopup(popup_1ecec6486b6700085fceee3dbe037df0)
+        ;
+
+        
+    
+    
+            removed_background.addTo(removed_background_group);
+        
+    
+            */
+        
+    
+        
+    
+            var feature_group_ae551147886aed3b040ee4fc5448a5d7 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var poly_line_df5735fc23737660fd3971da80682d68 = L.polyline(
+                [[24.9981235, 121.6266369], [24.9945687, 121.6327895]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_bf4012a3769c1f2cb50d5b35705e8639 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_122a9017119440b151c0a2450d01a5b4 = $(`<div id="html_122a9017119440b151c0a2450d01a5b4" style="width: 100.0%; height: 100.0%;"><b>跨距 P01–P02</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 735.4 m<br></div>`)[0];
+                popup_bf4012a3769c1f2cb50d5b35705e8639.setContent(html_122a9017119440b151c0a2450d01a5b4);
+            
+        
+
+        poly_line_df5735fc23737660fd3971da80682d68.bindPopup(popup_bf4012a3769c1f2cb50d5b35705e8639)
+        ;
+
+        
+    
+    
+            poly_line_df5735fc23737660fd3971da80682d68.bindTooltip(
+                `<div>
+                     P01–P02｜735.4 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_47a27f3763eb2231d39d9a07e70f0a12 = L.polyline(
+                [[24.9945687, 121.6327895], [24.9931421, 121.6352108]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_14fa7b457a02e5d25af02e0e93208404 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_f987417f9b669a07a105ae6321570b56 = $(`<div id="html_f987417f9b669a07a105ae6321570b56" style="width: 100.0%; height: 100.0%;"><b>跨距 P02–P03</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 291.1 m<br></div>`)[0];
+                popup_14fa7b457a02e5d25af02e0e93208404.setContent(html_f987417f9b669a07a105ae6321570b56);
+            
+        
+
+        poly_line_47a27f3763eb2231d39d9a07e70f0a12.bindPopup(popup_14fa7b457a02e5d25af02e0e93208404)
+        ;
+
+        
+    
+    
+            poly_line_47a27f3763eb2231d39d9a07e70f0a12.bindTooltip(
+                `<div>
+                     P02–P03｜291.1 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f2d5207e93e56ef5cd78ab3a229a035d = L.polyline(
+                [[24.9931421, 121.6352108], [24.9924355, 121.6363105]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_5763b56fff78a2476a2df94136fab68d = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_940832f056437dcd1bd9ba9462e51600 = $(`<div id="html_940832f056437dcd1bd9ba9462e51600" style="width: 100.0%; height: 100.0%;"><b>跨距 P03–P04</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 135.8 m<br></div>`)[0];
+                popup_5763b56fff78a2476a2df94136fab68d.setContent(html_940832f056437dcd1bd9ba9462e51600);
+            
+        
+
+        poly_line_f2d5207e93e56ef5cd78ab3a229a035d.bindPopup(popup_5763b56fff78a2476a2df94136fab68d)
+        ;
+
+        
+    
+    
+            poly_line_f2d5207e93e56ef5cd78ab3a229a035d.bindTooltip(
+                `<div>
+                     P03–P04｜135.8 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_bd334dcda44a6c8383b4d73852cdf32b = L.polyline(
+                [[24.9924355, 121.6363105], [24.991395, 121.6380281]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_404d0551203c8503c9a5d6181bfd371e = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_c3fc432bed835fb90d03b5bd288a2067 = $(`<div id="html_c3fc432bed835fb90d03b5bd288a2067" style="width: 100.0%; height: 100.0%;"><b>跨距 P04–P05</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 208.2 m<br></div>`)[0];
+                popup_404d0551203c8503c9a5d6181bfd371e.setContent(html_c3fc432bed835fb90d03b5bd288a2067);
+            
+        
+
+        poly_line_bd334dcda44a6c8383b4d73852cdf32b.bindPopup(popup_404d0551203c8503c9a5d6181bfd371e)
+        ;
+
+        
+    
+    
+            poly_line_bd334dcda44a6c8383b4d73852cdf32b.bindTooltip(
+                `<div>
+                     P04–P05｜208.2 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f971fcd108d44345a7cbe21cc6a381c9 = L.polyline(
+                [[24.991395, 121.6380281], [24.9899672, 121.6401894]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_600c24c91ac68498631cd1d827067914 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_4cc12adf96170f1d9abd95efb6d0fc09 = $(`<div id="html_4cc12adf96170f1d9abd95efb6d0fc09" style="width: 100.0%; height: 100.0%;"><b>跨距 P05–P06</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 269.5 m<br></div>`)[0];
+                popup_600c24c91ac68498631cd1d827067914.setContent(html_4cc12adf96170f1d9abd95efb6d0fc09);
+            
+        
+
+        poly_line_f971fcd108d44345a7cbe21cc6a381c9.bindPopup(popup_600c24c91ac68498631cd1d827067914)
+        ;
+
+        
+    
+    
+            poly_line_f971fcd108d44345a7cbe21cc6a381c9.bindTooltip(
+                `<div>
+                     P05–P06｜269.5 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_38521e372e03b6f556b70654ac218448 = L.polyline(
+                [[24.9899672, 121.6401894], [24.9876594, 121.6438201]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_ac1747b4eb14da10a26b140773c81757 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_862b87775ee1d1d0b82ba3b486af827a = $(`<div id="html_862b87775ee1d1d0b82ba3b486af827a" style="width: 100.0%; height: 100.0%;"><b>跨距 P06–P07</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 446.9 m<br></div>`)[0];
+                popup_ac1747b4eb14da10a26b140773c81757.setContent(html_862b87775ee1d1d0b82ba3b486af827a);
+            
+        
+
+        poly_line_38521e372e03b6f556b70654ac218448.bindPopup(popup_ac1747b4eb14da10a26b140773c81757)
+        ;
+
+        
+    
+    
+            poly_line_38521e372e03b6f556b70654ac218448.bindTooltip(
+                `<div>
+                     P06–P07｜446.9 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_005f23490676880cc0fb4f27c0ed53cb = L.polyline(
+                [[24.9876594, 121.6438201], [24.9838699, 121.6477929]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_c049173bb83ca02d51c0e4d570cba9c6 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_d2d8a352f842a327aa78925d693f0031 = $(`<div id="html_d2d8a352f842a327aa78925d693f0031" style="width: 100.0%; height: 100.0%;"><b>跨距 P07–P08</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 580.6 m<br></div>`)[0];
+                popup_c049173bb83ca02d51c0e4d570cba9c6.setContent(html_d2d8a352f842a327aa78925d693f0031);
+            
+        
+
+        poly_line_005f23490676880cc0fb4f27c0ed53cb.bindPopup(popup_c049173bb83ca02d51c0e4d570cba9c6)
+        ;
+
+        
+    
+    
+            poly_line_005f23490676880cc0fb4f27c0ed53cb.bindTooltip(
+                `<div>
+                     P07–P08｜580.6 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_1836937d9d09e29c3b9c41d0355c92f0 = L.polyline(
+                [[24.9838699, 121.6477929], [24.9813476, 121.6538672]],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#c62828", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.95, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_ae551147886aed3b040ee4fc5448a5d7);
+        
+    
+        var popup_8e8c8a8094b32129899370f19dcab7e2 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_a6a52312ead4b462ac1acc98fed9b28c = $(`<div id="html_a6a52312ead4b462ac1acc98fed9b28c" style="width: 100.0%; height: 100.0%;"><b>跨距 P08–P09</b><br>線路：深美～冬山線<br>電壓：345 kV<br>長度：約 673.9 m<br></div>`)[0];
+                popup_8e8c8a8094b32129899370f19dcab7e2.setContent(html_a6a52312ead4b462ac1acc98fed9b28c);
+            
+        
+
+        poly_line_1836937d9d09e29c3b9c41d0355c92f0.bindPopup(popup_8e8c8a8094b32129899370f19dcab7e2)
+        ;
+
+        
+    
+    
+            poly_line_1836937d9d09e29c3b9c41d0355c92f0.bindTooltip(
+                `<div>
+                     P08–P09｜673.9 m
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            feature_group_ae551147886aed3b040ee4fc5448a5d7.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+        
+    
+            var feature_group_b5e416948bf7f6c778f930061b97edf4 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_36fe69ee04ab4bebc932799a4530dc01 = L.circleMarker(
+                [24.9981235, 121.6266369],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_83534b624fcd3339c19590f86f397a27 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_406fa29d4670c4ff46d5eecb9fcbd011 = $(`<div id="html_406fa29d4670c4ff46d5eecb9fcbd011" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P01</b><br>線路：深美～冬山線<br>經度：121.6266369<br>緯度：24.9981235<br>前一跨距：—<br>下一跨距：735.4 m<br><small></small></div>`)[0];
+                popup_83534b624fcd3339c19590f86f397a27.setContent(html_406fa29d4670c4ff46d5eecb9fcbd011);
+            
+        
+
+        circle_marker_36fe69ee04ab4bebc932799a4530dc01.bindPopup(popup_83534b624fcd3339c19590f86f397a27)
+        ;
+
+        
+    
+    
+            circle_marker_36fe69ee04ab4bebc932799a4530dc01.bindTooltip(
+                `<div>
+                     P01
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2da91920a5a62d1f471d1f7c6c3f5314 = L.circleMarker(
+                [24.9945687, 121.6327895],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_37326a68bdbac9b5f63f4eae3efb8350 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_8456a584b41b54ca4ee49349e36273db = $(`<div id="html_8456a584b41b54ca4ee49349e36273db" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P02</b><br>線路：深美～冬山線<br>經度：121.6327895<br>緯度：24.9945687<br>前一跨距：735.4 m<br>下一跨距：291.1 m<br><small></small></div>`)[0];
+                popup_37326a68bdbac9b5f63f4eae3efb8350.setContent(html_8456a584b41b54ca4ee49349e36273db);
+            
+        
+
+        circle_marker_2da91920a5a62d1f471d1f7c6c3f5314.bindPopup(popup_37326a68bdbac9b5f63f4eae3efb8350)
+        ;
+
+        
+    
+    
+            circle_marker_2da91920a5a62d1f471d1f7c6c3f5314.bindTooltip(
+                `<div>
+                     P02
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d4b210f5739038a0ead27479cbe4eacb = L.circleMarker(
+                [24.9931421, 121.6352108],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_b89531fa0731c1d4f4ae9d723bb168d3 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_fd29a936655c5c0b23a52878d7dd6f02 = $(`<div id="html_fd29a936655c5c0b23a52878d7dd6f02" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P03</b><br>線路：深美～冬山線<br>經度：121.6352108<br>緯度：24.9931421<br>前一跨距：291.1 m<br>下一跨距：135.8 m<br><small></small></div>`)[0];
+                popup_b89531fa0731c1d4f4ae9d723bb168d3.setContent(html_fd29a936655c5c0b23a52878d7dd6f02);
+            
+        
+
+        circle_marker_d4b210f5739038a0ead27479cbe4eacb.bindPopup(popup_b89531fa0731c1d4f4ae9d723bb168d3)
+        ;
+
+        
+    
+    
+            circle_marker_d4b210f5739038a0ead27479cbe4eacb.bindTooltip(
+                `<div>
+                     P03
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3bbac307eb257a5c61ed130170854151 = L.circleMarker(
+                [24.9924355, 121.6363105],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_4df401815880f26169af1cb07d7a441a = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_8fa1a0bb7da21d1580e558cb86a65a0b = $(`<div id="html_8fa1a0bb7da21d1580e558cb86a65a0b" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P04</b><br>線路：深美～冬山線<br>經度：121.6363105<br>緯度：24.9924355<br>前一跨距：135.8 m<br>下一跨距：208.2 m<br><small></small></div>`)[0];
+                popup_4df401815880f26169af1cb07d7a441a.setContent(html_8fa1a0bb7da21d1580e558cb86a65a0b);
+            
+        
+
+        circle_marker_3bbac307eb257a5c61ed130170854151.bindPopup(popup_4df401815880f26169af1cb07d7a441a)
+        ;
+
+        
+    
+    
+            circle_marker_3bbac307eb257a5c61ed130170854151.bindTooltip(
+                `<div>
+                     P04
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_db9936ede50f61fb86c09a0a827be867 = L.circleMarker(
+                [24.991395, 121.6380281],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_5376dc77f1de6fc9c879b6d059551d43 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_bdabb5d611348c6c36a36bd6e6dbace3 = $(`<div id="html_bdabb5d611348c6c36a36bd6e6dbace3" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P05</b><br>線路：深美～冬山線<br>經度：121.6380281<br>緯度：24.9913950<br>前一跨距：208.2 m<br>下一跨距：269.5 m<br><small></small></div>`)[0];
+                popup_5376dc77f1de6fc9c879b6d059551d43.setContent(html_bdabb5d611348c6c36a36bd6e6dbace3);
+            
+        
+
+        circle_marker_db9936ede50f61fb86c09a0a827be867.bindPopup(popup_5376dc77f1de6fc9c879b6d059551d43)
+        ;
+
+        
+    
+    
+            circle_marker_db9936ede50f61fb86c09a0a827be867.bindTooltip(
+                `<div>
+                     P05
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b3cef019f894e8ab6674b4d7aa85dcfb = L.circleMarker(
+                [24.9899672, 121.6401894],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_ae9a0f578a67c6d85a197a5213641b29 = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_4a93a863e7bb7d11ddc25cfff7d65310 = $(`<div id="html_4a93a863e7bb7d11ddc25cfff7d65310" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P06</b><br>線路：深美～冬山線<br>經度：121.6401894<br>緯度：24.9899672<br>前一跨距：269.5 m<br>下一跨距：446.9 m<br><small></small></div>`)[0];
+                popup_ae9a0f578a67c6d85a197a5213641b29.setContent(html_4a93a863e7bb7d11ddc25cfff7d65310);
+            
+        
+
+        circle_marker_b3cef019f894e8ab6674b4d7aa85dcfb.bindPopup(popup_ae9a0f578a67c6d85a197a5213641b29)
+        ;
+
+        
+    
+    
+            circle_marker_b3cef019f894e8ab6674b4d7aa85dcfb.bindTooltip(
+                `<div>
+                     P06
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7e9ceb896c3f2c4e211ce3857d3d66be = L.circleMarker(
+                [24.9876594, 121.6438201],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_ba97b881239ccbb95950850e70bf3f9a = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_a18161e6362f2c11de5be75f4f09886b = $(`<div id="html_a18161e6362f2c11de5be75f4f09886b" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P07</b><br>線路：深美～冬山線<br>經度：121.6438201<br>緯度：24.9876594<br>前一跨距：446.9 m<br>下一跨距：580.6 m<br><small></small></div>`)[0];
+                popup_ba97b881239ccbb95950850e70bf3f9a.setContent(html_a18161e6362f2c11de5be75f4f09886b);
+            
+        
+
+        circle_marker_7e9ceb896c3f2c4e211ce3857d3d66be.bindPopup(popup_ba97b881239ccbb95950850e70bf3f9a)
+        ;
+
+        
+    
+    
+            circle_marker_7e9ceb896c3f2c4e211ce3857d3d66be.bindTooltip(
+                `<div>
+                     P07
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e80588e14093c967494002fa3994d600 = L.circleMarker(
+                [24.9838699, 121.6477929],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_3e74b309efa7e35691da8f1708c8919e = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_4bd64ed126d50588a461fe021808f2cb = $(`<div id="html_4bd64ed126d50588a461fe021808f2cb" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P08</b><br>線路：深美～冬山線<br>經度：121.6477929<br>緯度：24.9838699<br>前一跨距：580.6 m<br>下一跨距：673.9 m<br><small></small></div>`)[0];
+                popup_3e74b309efa7e35691da8f1708c8919e.setContent(html_4bd64ed126d50588a461fe021808f2cb);
+            
+        
+
+        circle_marker_e80588e14093c967494002fa3994d600.bindPopup(popup_3e74b309efa7e35691da8f1708c8919e)
+        ;
+
+        
+    
+    
+            circle_marker_e80588e14093c967494002fa3994d600.bindTooltip(
+                `<div>
+                     P08
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_269bdcdeae7c52f4d5d897e81ee6a28b = L.circleMarker(
+                [24.9813476, 121.6538672],
+                {"bubblingMouseEvents": true, "color": "#c62828", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffffff", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b5e416948bf7f6c778f930061b97edf4);
+        
+    
+        var popup_41c3a4812bb60dc611ae8ba164baa3fc = L.popup({
+  "maxWidth": 330,
+});
+
+        
+            
+                var html_58294fc113dfdc27446789926888454c = $(`<div id="html_58294fc113dfdc27446789926888454c" style="width: 100.0%; height: 100.0%;"><b>支撐節點 P09</b><br>線路：深美～冬山線<br>經度：121.6538672<br>緯度：24.9813476<br>前一跨距：673.9 m<br>下一跨距：—<br><small></small></div>`)[0];
+                popup_41c3a4812bb60dc611ae8ba164baa3fc.setContent(html_58294fc113dfdc27446789926888454c);
+            
+        
+
+        circle_marker_269bdcdeae7c52f4d5d897e81ee6a28b.bindPopup(popup_41c3a4812bb60dc611ae8ba164baa3fc)
+        ;
+
+        
+    
+    
+            circle_marker_269bdcdeae7c52f4d5d897e81ee6a28b.bindTooltip(
+                `<div>
+                     P09
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            feature_group_b5e416948bf7f6c778f930061b97edf4.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+
+            var supportNodeMarkersByPointId = {
+                "P01": circle_marker_36fe69ee04ab4bebc932799a4530dc01,
+                "P02": circle_marker_2da91920a5a62d1f471d1f7c6c3f5314,
+                "P03": circle_marker_d4b210f5739038a0ead27479cbe4eacb,
+                "P04": circle_marker_3bbac307eb257a5c61ed130170854151,
+                "P05": circle_marker_db9936ede50f61fb86c09a0a827be867,
+                "P06": circle_marker_b3cef019f894e8ab6674b4d7aa85dcfb,
+                "P07": circle_marker_7e9ceb896c3f2c4e211ce3857d3d66be,
+                "P08": circle_marker_e80588e14093c967494002fa3994d600,
+                "P09": circle_marker_269bdcdeae7c52f4d5d897e81ee6a28b
+            };
+        
+    
+            var marker_3f67f029c5fc3543f61541d67fca362b = L.marker(
+                [24.9981235, 121.6266369],
+                {
+}
+            ).addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+        
+    
+            var icon_5cd7eeefbb9573c57cc09d25786bfd2e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "play",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+            marker_3f67f029c5fc3543f61541d67fca362b.bindTooltip(
+                `<div>
+                     選段起點 P01
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3f67f029c5fc3543f61541d67fca362b.setIcon(icon_5cd7eeefbb9573c57cc09d25786bfd2e);
+            
+    
+            var marker_3e964374f8c978ee0fa064b3249c04d3 = L.marker(
+                [24.9813476, 121.6538672],
+                {
+}
+            ).addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+        
+    
+            var icon_50744154f9b583430f5217ae8e741bd5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "stop",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+            marker_3e964374f8c978ee0fa064b3249c04d3.bindTooltip(
+                `<div>
+                     選段終點 P09
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3e964374f8c978ee0fa064b3249c04d3.setIcon(icon_50744154f9b583430f5217ae8e741bd5);
+            
+    
+            var layer_control_4725f7be8ddfe8acecba0d6a35a6ee94_layers = {
+                base_layers : {
+                    "OpenStreetMap" : tile_layer_0ba96ba654612aad73f349e11ca29920,
+                    "Esri World Imagery" : tile_layer_a04f7b2167a447fa1986aa32eee19d36,
+                },
+                overlays :  {
+                    "\u885b\u661f\u5730\u540d\u6a19\u8a3b" : tile_layer_fb963aca62d5a28077832cab7bc62cb8,
+                    "345 kV \u8f38\u96fb\u7dda\u8de8\u8ddd" : feature_group_ae551147886aed3b040ee4fc5448a5d7,
+                    "\u652f\u6490\u7bc0\u9ede P01\u2013P09" : feature_group_b5e416948bf7f6c778f930061b97edf4,
+                },
+            };
+            let layer_control_4725f7be8ddfe8acecba0d6a35a6ee94 = L.control.layers(
+                layer_control_4725f7be8ddfe8acecba0d6a35a6ee94_layers.base_layers,
+                layer_control_4725f7be8ddfe8acecba0d6a35a6ee94_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+
+            var chm_2026_layer = null;
+            var chm_2026_opacity = 0.65;
+            var chm_2026_opacity_frame = null;
+            var chm_2026_tif_url = "assets/NewTaipei_Shenmei_Dongshan_345kV_3km_prediction_2026.tif";
+            var chm_2026_viridis_stops = [
+                "#440154", "#482878", "#3e4989", "#31688e", "#26828e",
+                "#1f9e89", "#35b779", "#6ece58", "#b5de2b", "#fde725"
+            ];
+            var chm_2026_proxy = createRasterVisibilityProxy();
+            var chm_2026_loading = null;
+            layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(chm_2026_proxy, "2026 CHM");
+
+            var ChmOpacityControl = L.Control.extend({
+                options: { position: "topright" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control chm-opacity-control");
+                    container.innerHTML =
+                        '<div class="chm-opacity-control__title">' +
+                        '<span>2026 CHM opacity</span><span id="chm-opacity-value">65%</span>' +
+                        '</div>' +
+                        '<input id="chm-opacity-slider" type="range" min="0" max="100" value="65" step="1" aria-label="2026 CHM opacity" disabled>' +
+                        '<div id="chm-opacity-status" style="margin-top:4px;color:#52616b;">Select 2026 CHM to load</div>';
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    var slider = container.querySelector("#chm-opacity-slider");
+                    var value = container.querySelector("#chm-opacity-value");
+                    L.DomEvent.on(slider, "input", function(event) {
+                        scheduleChmOpacity(Number(event.target.value) / 100);
+                        value.textContent = event.target.value + "%";
+                    });
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new ChmOpacityControl());
+
+            var ChmLegendControl = L.Control.extend({
+                options: { position: "bottomright" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control chm-legend");
+                    container.innerHTML =
+                        '<div class="chm-legend__title">2026 CHM legend (m)</div>' +
+                        '<div class="chm-legend__gradient" aria-label="viridis color scale"></div>' +
+                        '<div class="chm-legend__labels"><span id="chm-legend-min">0</span><span id="chm-legend-max">Select layer</span></div>';
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new ChmLegendControl());
+
+            function chm_2026_hex_to_rgb(hex) {
+                return {
+                    r: parseInt(hex.slice(1, 3), 16),
+                    g: parseInt(hex.slice(3, 5), 16),
+                    b: parseInt(hex.slice(5, 7), 16)
+                };
+            }
+
+            function chm_2026_build_viridis_lut() {
+                var rgbStops = chm_2026_viridis_stops.map(chm_2026_hex_to_rgb);
+                var lut = [];
+                for (var index = 0; index < 256; index += 1) {
+                    var normalized = index / 255;
+                    var scaled = normalized * (rgbStops.length - 1);
+                    var lowerIndex = Math.floor(scaled);
+                    var upperIndex = Math.min(lowerIndex + 1, rgbStops.length - 1);
+                    var fraction = scaled - lowerIndex;
+                    var lower = rgbStops[lowerIndex];
+                    var upper = rgbStops[upperIndex];
+                    var red = Math.round(lower.r + (upper.r - lower.r) * fraction);
+                    var green = Math.round(lower.g + (upper.g - lower.g) * fraction);
+                    var blue = Math.round(lower.b + (upper.b - lower.b) * fraction);
+                    lut.push("rgba(" + red + "," + green + "," + blue + ",1)");
+                }
+                return lut;
+            }
+
+            var chm_2026_viridis_lut = chm_2026_build_viridis_lut();
+
+            function chm_2026_viridis_color(normalized) {
+                return chm_2026_viridis_lut[Math.round(normalized * (chm_2026_viridis_lut.length - 1))];
+            }
+
+            function scheduleChmOpacity(value) {
+                chm_2026_opacity = value;
+                if (chm_2026_opacity_frame !== null) return;
+                chm_2026_opacity_frame = window.requestAnimationFrame(function() {
+                    chm_2026_opacity_frame = null;
+                    if (chm_2026_layer) chm_2026_layer.setOpacity(chm_2026_opacity);
+                });
+            }
+
+            function chm_2026_format_height(value) {
+                return Number(value).toFixed(Number(value) >= 10 ? 1 : 2) + " m";
+            }
+
+            function chm_2026_color(values, min, max, noDataValue) {
+                var value = values && values[0];
+                if (!Number.isFinite(value) || value <= 0 || (noDataValue !== null && value === noDataValue)) {
+                    return "rgba(0,0,0,0)";
+                }
+                var normalized = (value - min) / (max - min || 1);
+                normalized = Math.max(0, Math.min(1, normalized));
+                return chm_2026_viridis_color(normalized);
+            }
+
+            function loadChm2026Layer() {
+                if (chm_2026_layer) return Promise.resolve(chm_2026_layer);
+                if (chm_2026_loading) return chm_2026_loading;
+                document.querySelector("#chm-opacity-status").textContent = "Loading GeoTIFF...";
+                chm_2026_loading = fetch(chm_2026_tif_url)
+                    .then(function(response) {
+                        if (!response.ok) throw new Error("GeoTIFF request failed: " + response.status);
+                        return response.arrayBuffer();
+                    })
+                    .then(function(arrayBuffer) { return parseGeoraster(arrayBuffer); })
+                    .then(function(georaster) {
+                        var min = georaster.mins[0];
+                        var max = georaster.maxs[0];
+                        var noDataValue = georaster.noDataValue;
+                        chm_2026_layer = new GeoRasterLayer({
+                            georaster: georaster,
+                            opacity: chm_2026_opacity,
+                            className: "taipower-chm-2026-raster",
+                            pane: "taipower-chm-2026-pane",
+                            pixelValuesToColorFn: function(values) {
+                                return chm_2026_color(values, min, max, noDataValue);
+                            },
+                            resolution: 128,
+                            resampleMethod: "bilinear",
+                            updateWhenIdle: true,
+                            updateWhenZooming: false,
+                            keepBuffer: 2,
+                            caching: false
+                        });
+                        chm_2026_proxy.attachRaster(chm_2026_layer);
+                        document.querySelector("#chm-opacity-slider").disabled = false;
+                        document.querySelector("#chm-opacity-status").textContent = "GeoTIFF loaded";
+                        document.querySelector("#chm-legend-max").textContent = chm_2026_format_height(max);
+                        return chm_2026_layer;
+                    })
+                    .catch(function(error) {
+                        chm_2026_loading = null;
+                        console.error("Unable to load 2026 CHM GeoTIFF", error);
+                        document.querySelector("#chm-opacity-status").textContent = "GeoTIFF load failed";
+                        if (map_67ae7f970dd677e2a1239d0560e5ae38.hasLayer(chm_2026_proxy)) {
+                            map_67ae7f970dd677e2a1239d0560e5ae38.removeLayer(chm_2026_proxy);
+                        }
+                        throw error;
+                    });
+                return chm_2026_loading;
+            }
+
+            map_67ae7f970dd677e2a1239d0560e5ae38.on("overlayadd", function(event) {
+                if (event.layer === chm_2026_proxy) loadChm2026Layer();
+            });
+
+            var chm_risk_2026_layer = null;
+            var chm_risk_2026_proxy = createRasterVisibilityProxy();
+            var chm_risk_2026_opacity = 0.75;
+            var chm_risk_2026_opacity_frame = null;
+            var chm_risk_2026_url = "assets/taipower_chm_2026_50m_corridor.tif";
+            var chm_risk_colors = ["#fff7bc", "#fee391", "#fec44f", "#fe9929", "#ec7014", "#cc4c02"];
+            var chm_risk_labels = ["0\u2013<10 m", "10\u2013<20 m", "20\u2013<30 m", "30\u2013<40 m", "40\u2013<50 m", "\u226550 m"];
+            layer_control_4725f7be8ddfe8acecba0d6a35a6ee94.addOverlay(chm_risk_2026_proxy, "50 m \u690d\u88ab\u98a8\u96aa TIFF");
+            chm_risk_2026_proxy.addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+
+            function riskColor(values) {
+                var value = values && values[0];
+                if (!Number.isFinite(value) || value <= 0 || value === -9999) return "rgba(0,0,0,0)";
+                return chm_risk_colors[Math.min(Math.floor(value / 10), chm_risk_colors.length - 1)];
+            }
+
+            function riskClassLabel(value) {
+                return chm_risk_labels[Math.min(Math.floor(value / 10), chm_risk_labels.length - 1)];
+            }
+
+            function riskHeightAtLatLng(latlng) {
+                if (!chm_risk_2026_layer || !chm_risk_2026_layer.options || !chm_risk_2026_layer.options.georaster) return null;
+                var raster = chm_risk_2026_layer.options.georaster;
+                if (![raster.xmin, raster.xmax, raster.ymin, raster.ymax, raster.width, raster.height].every(Number.isFinite)) return null;
+                if (latlng.lng < raster.xmin || latlng.lng > raster.xmax || latlng.lat < raster.ymin || latlng.lat > raster.ymax) return null;
+                var band = raster.values && raster.values[0];
+                if (!band) return null;
+                var column = Math.max(0, Math.min(raster.width - 1, Math.floor((latlng.lng - raster.xmin) / (raster.xmax - raster.xmin) * raster.width)));
+                var row = Math.max(0, Math.min(raster.height - 1, Math.floor((raster.ymax - latlng.lat) / (raster.ymax - raster.ymin) * raster.height)));
+                var rowValues = band[row];
+                var value = rowValues && rowValues[column];
+                var noDataValue = raster.noDataValue;
+                if (!Number.isFinite(value) || value <= 0 || value === -9999 || (Number.isFinite(noDataValue) && value === noDataValue)) return null;
+                return value;
+            }
+
+            map_67ae7f970dd677e2a1239d0560e5ae38.on("click", function(event) {
+                if (!chm_risk_2026_layer || !map_67ae7f970dd677e2a1239d0560e5ae38.hasLayer(chm_risk_2026_proxy)) return;
+                var value = riskHeightAtLatLng(event.latlng);
+                if (value === null) return;
+                var maxHeightM = Math.round(value);
+                L.popup({ maxWidth: 240 })
+                    .setLatLng(event.latlng)
+                    .setContent(
+                        "<strong>50 m \u690d\u88ab\u98a8\u96aa</strong><br>" +
+                        "<strong>\u6a39\u9ad8:</strong> " + maxHeightM + " m<br>" +
+                        "<strong>\u9ad8\u5ea6\u7d1a\u8ddd:</strong> " + riskClassLabel(value)
+                    )
+                    .openOn(map_67ae7f970dd677e2a1239d0560e5ae38);
+            });
+
+            function scheduleChmRiskOpacity(value) {
+                chm_risk_2026_opacity = value;
+                if (chm_risk_2026_opacity_frame !== null) return;
+                chm_risk_2026_opacity_frame = window.requestAnimationFrame(function() {
+                    chm_risk_2026_opacity_frame = null;
+                    if (chm_risk_2026_layer) chm_risk_2026_layer.setOpacity(chm_risk_2026_opacity);
+                });
+            }
+
+            var ChmRiskOpacityControl = L.Control.extend({
+                options: { position: "topright" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control chm-opacity-control");
+                    container.innerHTML =
+                        '<div class="chm-opacity-control__title"><span>50 m risk TIFF opacity (corridor classes)</span><span id="chm-risk-opacity-value">75%</span></div>' +
+                        '<input id="chm-risk-opacity-slider" type="range" min="0" max="100" value="75" step="1" aria-label="50 m risk TIFF opacity (corridor classes)" disabled>' +
+                        '<div id="chm-risk-opacity-status" style="margin-top:4px;color:#52616b;">Loading GeoTIFF...</div>';
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    L.DomEvent.on(container.querySelector("#chm-risk-opacity-slider"), "input", function(event) {
+                        scheduleChmRiskOpacity(Number(event.target.value) / 100);
+                        container.querySelector("#chm-risk-opacity-value").textContent = event.target.value + "%";
+                    });
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new ChmRiskOpacityControl());
+
+            var ChmRiskLegendControl = L.Control.extend({
+                options: { position: "bottomright" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control chm-legend");
+                    container.innerHTML = '<div class="chm-legend__title">50 m risk TIFF legend \u2014 tree height (m)</div>' +
+                        chm_risk_labels.map(function(label, index) {
+                            return '<div class="risk-legend__item"><span class="risk-legend__swatch" style="background:' + chm_risk_colors[index] + '"></span>' + label + '</div>';
+                        }).join("");
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new ChmRiskLegendControl());
+
+            fetch(chm_risk_2026_url)
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Risk GeoTIFF request failed: " + response.status);
+                    return response.arrayBuffer();
+                })
+                .then(function(arrayBuffer) { return parseGeoraster(arrayBuffer); })
+                .then(function(georaster) {
+                    chm_risk_2026_layer = new GeoRasterLayer({
+                        georaster: georaster, opacity: chm_risk_2026_opacity, pixelValuesToColorFn: riskColor,
+                        className: "taipower-risk-2026-raster",
+                        pane: "taipower-risk-2026-pane",
+                        resolution: 128,
+                        resampleMethod: "nearest",
+                        updateWhenIdle: true,
+                        updateWhenZooming: false,
+                        keepBuffer: 2,
+                        caching: false
+                    });
+                    chm_risk_2026_proxy.attachRaster(chm_risk_2026_layer);
+                    document.querySelector("#chm-risk-opacity-slider").disabled = false;
+                    document.querySelector("#chm-risk-opacity-status").textContent = "GeoTIFF loaded — corridor classes ready";
+                })
+                .catch(function(error) {
+                    console.error("Unable to load 50 m risk GeoTIFF", error);
+                    document.querySelector("#chm-risk-opacity-status").textContent = "GeoTIFF load failed";
+                });
+
+            var TowerChartControl = L.Control.extend({
+                options: { position: "bottomleft" },
+                onAdd: function(map) {
+                    var container = L.DomUtil.create("div", "leaflet-control tower-chart-control");
+                    container.innerHTML = '<details open><summary>2026 50 m tower maximum tree height (m)</summary><div id="tower-chart-status">Loading tower statistics...</div><canvas id="tower-height-chart" aria-label="2026 50 m tower maximum tree height chart"></canvas></details>';
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    return container;
+                }
+            });
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(new TowerChartControl());
+
+            fetch("assets/tower_chm_2026_50m_stats.json")
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Tower statistics request failed: " + response.status);
+                    return response.json();
+                })
+                .then(function(stats) {
+                    var towers = (Array.isArray(stats.towers) ? stats.towers : [])
+                        .slice()
+                        .sort(function(a, b) { return a.sequence - b.sequence; });
+                    towers.forEach(function(tower) {
+                        var supportMarker = supportNodeMarkersByPointId[tower.point_id];
+                        var heightIsValid = Number.isFinite(tower.max_height_m);
+                        var maxHeightM = Number.isFinite(tower.max_height_m) ? Math.round(tower.max_height_m) : null;
+                        if (supportMarker) {
+                            var supportPopup = supportMarker.getPopup();
+                            var supportContent = supportPopup ? supportPopup.getContent() : "";
+                            var supportHtml = typeof supportContent === "string" ? supportContent : (supportContent && supportContent.innerHTML) || "";
+                            supportMarker.bindPopup(
+                                supportHtml + "<hr style='margin:6px 0;border:0;border-top:1px solid #ddd;'>" +
+                                "<strong>50 m \u6700\u5927\u6a39\u9ad8:</strong> " + (heightIsValid ? maxHeightM + " m" : "No valid data") + "<br>" +
+                                "<strong>\u9ad8\u5ea6\u7d1a\u8ddd:</strong> " + (tower.height_class || "No valid data") + "<br>" +
+                                "<strong>\u6709\u6548\u50cf\u5143\u6578:</strong> " + (tower.valid_pixel_count ?? "\u2014"),
+                                supportPopup ? supportPopup.options : { maxWidth: 330 }
+                            );
+                        }
+                    });
+                    var hasValidHeights = towers.some(function(tower) { return Number.isFinite(tower.max_height_m); });
+                    var status = document.querySelector("#tower-chart-status");
+                    if (!hasValidHeights) { status.textContent = "No valid data"; return; }
+                    status.remove();
+                    var canvas = document.querySelector("#tower-height-chart");
+                    new Chart(canvas, {
+                        type: "bar",
+                        data: {
+                            labels: towers.map(function(tower) { return tower.point_id; }),
+                            datasets: [{
+                                label: "Maximum tree height (m)",
+                                data: towers.map(function(tower) { return Number.isFinite(tower.max_height_m) ? Math.round(tower.max_height_m) : null; }),
+                                backgroundColor: towers.map(function(tower) { return Number.isFinite(tower.max_height_m) ? chm_risk_colors[tower.height_class_index] || "#7f8c8d" : "#7f8c8d"; })
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true, title: { display: true, text: "m" } } }
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    console.error("Unable to load tower statistics", error);
+                    document.querySelector("#tower-chart-status").textContent = "Tower statistics load failed";
+                });
+
+        
+    
+            L.control.fullscreen(
+                {
+  "position": "topleft",
+  "title": "Full Screen",
+  "titleCancel": "Exit Full Screen",
+  "forceSeparateButton": false,
+}
+            ).addTo(map_67ae7f970dd677e2a1239d0560e5ae38);
+        
+    
+            var measure_control_42040beb6c529d6e3a664c5d7ea7fb3c = new L.Control.Measure(
+                {
+  "position": "topleft",
+  "primaryLengthUnit": "meters",
+  "secondaryLengthUnit": "kilometers",
+  "primaryAreaUnit": "sqmeters",
+  "secondaryAreaUnit": "acres",
+});
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(measure_control_42040beb6c529d6e3a664c5d7ea7fb3c);
+
+            // Workaround for using this plugin with Leaflet>=1.8.0
+            // https://github.com/ljagis/leaflet-measure/issues/171
+            L.Control.Measure.include({
+                _setCaptureMarkerIcon: function () {
+                    // disable autopan
+                    this._captureMarker.options.autoPanOnFocus = false;
+                    // default function
+                    this._captureMarker.setIcon(
+                        L.divIcon({
+                            iconSize: this._map.getSize().multiplyBy(2)
+                        })
+                    );
+                },
+            });
+
+        
+    
+            var mouse_position_f540e323b30d72ec67fb028635d3276f = new L.Control.MousePosition(
+                {
+  "position": "bottomright",
+  "separator": " / ",
+  "emptyString": "Unavailable",
+  "lngFirst": false,
+  "numDigits": 6,
+  "prefix": "\u5ea7\u6a19",
+}
+            );
+            mouse_position_f540e323b30d72ec67fb028635d3276f.options["latFormatter"] =
+                undefined;
+            mouse_position_f540e323b30d72ec67fb028635d3276f.options["lngFormatter"] =
+                undefined;
+            map_67ae7f970dd677e2a1239d0560e5ae38.addControl(mouse_position_f540e323b30d72ec67fb028635d3276f);
+        
+    
+            map_67ae7f970dd677e2a1239d0560e5ae38.fitBounds(
+                [[24.977347599999998, 121.62263689999999], [25.0021235, 121.6578672]],
+                {}
+            );
+        
+</script>
+</html>

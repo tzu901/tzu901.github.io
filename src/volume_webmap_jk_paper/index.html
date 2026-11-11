@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore Sentinel-2 RGB imagery, GCHM canopy height, and estimated stem volume for two JK Paper sites in India. Query any rectangle or polygon.">
+  <meta name="theme-color" content="#244b3d">
+  <title>JK Paper | Canopy Height &amp; Volume Explorer</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.34/esri/themes/light/main.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://js.arcgis.com/4.34/"></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="page-header">
+    <div class="identity"><span class="brand-mark" aria-hidden="true">JK</span><div><span class="eyebrow"> CANOPY HEIGHT · VOLUME</span><h1>JK Paper Explorer</h1></div></div>
+    <span id="load-status" class="status" role="status">Loading map…</span>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar" aria-label="Volume queries and results">
+      <section class="intro">
+        <span class="section-kicker" id="site-region">India</span>
+        <h2>Imagery, height &amp; volume</h2>
+        <p>Draw a rectangle or polygon using the tools in the upper left. Results update automatically. Select a shape to edit its boundary.</p>
+      </section>
+      <section class="sites-section" aria-label="Switch study site">
+        <div class="section-label">STUDY SITE</div>
+        <div class="site-buttons"><button data-site="point1" class="active" aria-pressed="true" disabled>Site 1 <small>Odisha</small></button><button data-site="point2" aria-pressed="false" disabled>Site 2 <small>Gujarat</small></button></div>
+        <p id="site-summary" class="site-summary">Loading site data…</p>
+      </section>
+      <div class="action-row">
+        <button id="query-view" class="primary" disabled>Query full image</button>
+        <button id="clear-selection" disabled>Clear selection</button>
+      </div>
+      <section class="result-card" aria-label="Estimated volume results" aria-live="polite">
+        <div class="result-heading"><span id="selection-name">No area selected</span><span class="estimate-badge">CHM estimate</span></div>
+        <div class="volume-value"><strong id="volume-value">—</strong><span>m³</span></div>
+        <dl class="metrics">
+          <div><dt>Selected area</dt><dd><span id="selection-area">—</span> ha</dd></div>
+          <div><dt>Valid data area</dt><dd><span id="covered-area">—</span> ha</dd></div>
+          <div><dt>Mean volume density</dt><dd><span id="density-value">—</span> m³/ha</dd></div>
+          <div><dt>Mean canopy height</dt><dd><span id="height-value">—</span> m</dd></div>
+          <div><dt>Data coverage</dt><dd><span id="coverage-value">—</span> %</dd></div>
+        </dl>
+        <p id="selection-hint" class="result-hint">Draw an area or choose “Query full image”.</p>
+        <button id="download-result" class="download-button" disabled>Download query CSV <span aria-hidden="true">↓</span></button>
+      </section>
+      <section class="layer-section" aria-label="Layer settings">
+        <div class="section-label">LAYER</div>
+        <p class="active-layer"><span class="layer-dot volume-dot"></span><strong id="active-layer-name">Sentinel-2 RGB</strong></p>
+        <label class="opacity-row" for="volume-opacity"><span>Opacity</span><input id="volume-opacity" type="range" min="0" max="100" value="100"><output id="opacity-value">100%</output></label>
+        <label class="toggle-row"><span><span class="layer-dot boundary-dot"></span>Image footprint</span><input id="show-footprint" type="checkbox" checked></label>
+        <p class="lazy-note"><span class="live-dot"></span>Queries read source values</p>
+      </section>
+      <details class="method-note"><summary>Data and methods</summary><p>RGB uses Sentinel-2 bands B4/B3/B2 with a separate 2–98 percentile display stretch for each site. The satellite basemap is Esri World Imagery.</p><p>CHM is canopy height estimated by a Sentinel-2/GEDI model. Both sites share the same legend scales and represent different locations.</p><p id="model-equation"></p><p></p><div class="source-downloads"><a id="download-rgb" href="#" download>Download RGB display PNG</a><a id="download-chm" href="#" download>Download CHM GeoTIFF (m)</a><a id="download-volume" href="#" download>Download volume GeoTIFF (m³/ha)</a></div></details>
+    </aside>
+    <section class="map-region" aria-label="Interactive volume map">
+      <div id="view-div" aria-label="JK Paper site imagery; draw a rectangle or polygon to query"></div>
+      <button id="reset-view" class="reset-view" disabled title="Return to the full extent of the current site">↗ Back to site</button>
+      <div class="map-layer-tabs" role="group" aria-label="Switch map layer">
+        <button data-layer="satellite" aria-pressed="false" disabled>Satellite</button>
+        <button data-layer="rgb" class="active" aria-pressed="true" disabled>RGB</button>
+        <button data-layer="chm" aria-pressed="false" disabled>CHM</button>
+        <button data-layer="volume" aria-pressed="false" disabled>Volume</button>
+      </div>
+      <div id="map-notice" class="map-notice" role="status">Rectangle: drag to select · Polygon: click vertices, double-click to finish</div>
+      <div class="legend" id="volume-legend" hidden><div class="legend-heading"><span id="legend-title">Volume density</span><span id="legend-unit">m³/ha</span></div><div class="legend-gradient"></div><div class="legend-labels"><span>0</span><span id="legend-max">—</span></div></div>
+      <div id="load-error" class="load-error" role="alert" hidden>Map data could not be loaded. Check your internet connection and refresh the page.<button onclick="location.reload()">Reload</button></div>
+    </section>
+  </main>
+  <noscript>Please enable JavaScript to use the interactive map.</noscript>
+</body>
+</html>

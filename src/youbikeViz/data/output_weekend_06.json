@@ -1,0 +1,1163 @@
+[
+    {
+        "rent_station": "捷運線型公園(後街)",
+        "return_station": "捷運線型公園(後街)",
+        "rent_lat": "25.09812",
+        "rent_lon": "121.52449",
+        "end_lat": "25.09812",
+        "end_lon": "121.52449",
+        "frequency": "2070"
+    },
+    {
+        "rent_station": "捷運臺北車站(M2出口)",
+        "return_station": "捷運臺北車站(M2出口)",
+        "rent_lat": "25.04821",
+        "rent_lon": "121.51903",
+        "end_lat": "25.04821",
+        "end_lon": "121.51903",
+        "frequency": "621"
+    },
+    {
+        "rent_station": "捷運臺大醫院站(4號出口)",
+        "return_station": "捷運臺大醫院站(4號出口)",
+        "rent_lat": "25.04297",
+        "rent_lon": "121.51643",
+        "end_lat": "25.04297",
+        "end_lon": "121.51643",
+        "frequency": "1965"
+    },
+    {
+        "rent_station": "捷運臺電大樓站(1號出口)",
+        "return_station": "捷運臺電大樓站(1號出口)",
+        "rent_lat": "25.0197",
+        "rent_lon": "121.529",
+        "end_lat": "25.0197",
+        "end_lon": "121.529",
+        "frequency": "1606"
+    },
+    {
+        "rent_station": "捷運臺電大樓站(2號出口)",
+        "return_station": "捷運臺電大樓站(2號出口)",
+        "rent_lat": "25.02021",
+        "rent_lon": "121.52942",
+        "end_lat": "25.02021",
+        "end_lon": "121.52942",
+        "frequency": "700"
+    },
+    {
+        "rent_station": "捷運臺電大樓站(2號出口)_1",
+        "return_station": "捷運臺電大樓站(2號出口)_1",
+        "rent_lat": "25.02055",
+        "rent_lon": "121.52855",
+        "end_lat": "25.02055",
+        "end_lon": "121.52855",
+        "frequency": "653"
+    },
+    {
+        "rent_station": "捷運臺電大樓站(4號出口)",
+        "return_station": "捷運臺電大樓站(4號出口)",
+        "rent_lat": "25.02102",
+        "rent_lon": "121.52751",
+        "end_lat": "25.02102",
+        "end_lon": "121.52751",
+        "frequency": "1607"
+    },
+    {
+        "rent_station": "捷運臺電大樓站(5號出口)",
+        "return_station": "捷運臺電大樓站(5號出口)",
+        "rent_lat": "25.02075",
+        "rent_lon": "121.52771",
+        "end_lat": "25.02075",
+        "end_lon": "121.52771",
+        "frequency": "1218"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "中山天母路口",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11856",
+        "end_lon": "121.52964",
+        "frequency": "1462"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "啟明學校",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11742",
+        "end_lon": "121.53472",
+        "frequency": "724"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "士東路91巷口",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11247",
+        "end_lon": "121.52914",
+        "frequency": "504"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "天和公園",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.12001",
+        "end_lon": "121.53342",
+        "frequency": "860"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "天母棒球場",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11341",
+        "end_lon": "121.53195",
+        "frequency": "2744"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "天母運動公園",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11633",
+        "end_lon": "121.53414",
+        "frequency": "2839"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "忠誠路一段173巷口",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.10813",
+        "end_lon": "121.5304",
+        "frequency": "764"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "忠誠路二段53巷",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11127",
+        "end_lon": "121.53244",
+        "frequency": "2259"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "捷運芝山站(1號出口)",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.10225",
+        "end_lon": "121.52286",
+        "frequency": "2863"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "捷運芝山站(2號出口)_1",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.10336",
+        "end_lon": "121.52263",
+        "frequency": "523"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "聖山綠地",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.10696",
+        "end_lon": "121.53234",
+        "frequency": "1545"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "臺北市立大學(天母校區)",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11356",
+        "end_lon": "121.53718",
+        "frequency": "1385"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "芝山國小",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11044",
+        "end_lon": "121.53595",
+        "frequency": "1531"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "蘭興公園",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.11184",
+        "end_lon": "121.52589",
+        "frequency": "888"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "蘭雅公園",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.10991",
+        "end_lon": "121.53039",
+        "frequency": "2255"
+    },
+    {
+        "rent_station": "捷運芝山站(1號出口)",
+        "return_station": "雨農國小",
+        "rent_lat": "25.10225",
+        "rent_lon": "121.52286",
+        "end_lat": "25.1054",
+        "end_lon": "121.5295",
+        "frequency": "758"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "中山天母路口",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.11856",
+        "end_lon": "121.52964",
+        "frequency": "523"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "天母棒球場",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.11341",
+        "end_lon": "121.53195",
+        "frequency": "599"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "天母運動公園",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.11633",
+        "end_lon": "121.53414",
+        "frequency": "639"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "忠誠路二段53巷",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.11127",
+        "end_lon": "121.53244",
+        "frequency": "756"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "捷運芝山站(2號出口)",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.10364",
+        "end_lon": "121.52219",
+        "frequency": "1670"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "臺北市立大學(天母校區)",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.11356",
+        "end_lon": "121.53718",
+        "frequency": "703"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "芝山國小",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.11044",
+        "end_lon": "121.53595",
+        "frequency": "1043"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)",
+        "return_station": "蘭雅公園",
+        "rent_lat": "25.10364",
+        "rent_lon": "121.52219",
+        "end_lat": "25.10991",
+        "end_lon": "121.53039",
+        "frequency": "799"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "中山天母路口",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11856",
+        "end_lon": "121.52964",
+        "frequency": "1353"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "啟明學校",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11742",
+        "end_lon": "121.53472",
+        "frequency": "832"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "士東路91巷口",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11247",
+        "end_lon": "121.52914",
+        "frequency": "1087"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "天和公園",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.12001",
+        "end_lon": "121.53342",
+        "frequency": "549"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "天母棒球場",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11341",
+        "end_lon": "121.53195",
+        "frequency": "1594"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "天母運動公園",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11633",
+        "end_lon": "121.53414",
+        "frequency": "1747"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "忠誠路二段53巷",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11127",
+        "end_lon": "121.53244",
+        "frequency": "1249"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "捷運芝山站(2號出口)_1",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.10336",
+        "end_lon": "121.52263",
+        "frequency": "1520"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "聖山綠地",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.10696",
+        "end_lon": "121.53234",
+        "frequency": "730"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "臺北市立大學(天母校區)",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11356",
+        "end_lon": "121.53718",
+        "frequency": "1379"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "芝山國小",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11044",
+        "end_lon": "121.53595",
+        "frequency": "2714"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "蘭興公園",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.11184",
+        "end_lon": "121.52589",
+        "frequency": "1380"
+    },
+    {
+        "rent_station": "捷運芝山站(2號出口)_1",
+        "return_station": "蘭雅公園",
+        "rent_lat": "25.10336",
+        "rent_lon": "121.52263",
+        "end_lat": "25.10991",
+        "end_lon": "121.53039",
+        "frequency": "2043"
+    },
+    {
+        "rent_station": "捷運萬芳社區站",
+        "return_station": "捷運萬芳社區站",
+        "rent_lat": "24.99886",
+        "rent_lon": "121.56769",
+        "end_lat": "24.99886",
+        "end_lon": "121.56769",
+        "frequency": "1133"
+    },
+    {
+        "rent_station": "捷運萬隆站(1號出口)",
+        "return_station": "捷運萬隆站(1號出口)",
+        "rent_lat": "25.00115",
+        "rent_lon": "121.53916",
+        "end_lat": "25.00115",
+        "end_lon": "121.53916",
+        "frequency": "1410"
+    },
+    {
+        "rent_station": "捷運萬隆站(2號出口)",
+        "return_station": "捷運萬隆站(2號出口)",
+        "rent_lat": "25.00144",
+        "rent_lon": "121.53983",
+        "end_lat": "25.00144",
+        "end_lon": "121.53983",
+        "frequency": "1670"
+    },
+    {
+        "rent_station": "捷運萬隆站(4號出口)",
+        "return_station": "捷運萬隆站(4號出口)",
+        "rent_lat": "25.0027",
+        "rent_lon": "121.53861",
+        "end_lat": "25.0027",
+        "end_lon": "121.53861",
+        "frequency": "1631"
+    },
+    {
+        "rent_station": "捷運葫洲站(1號出口)",
+        "return_station": "捷運葫洲站(1號出口)",
+        "rent_lat": "25.07249",
+        "rent_lon": "121.60796",
+        "end_lat": "25.07249",
+        "end_lon": "121.60796",
+        "frequency": "1697"
+    },
+    {
+        "rent_station": "捷運行天宮站(1號出口)",
+        "return_station": "捷運行天宮站(1號出口)",
+        "rent_lat": "25.05867",
+        "rent_lon": "121.53305",
+        "end_lat": "25.05867",
+        "end_lon": "121.53305",
+        "frequency": "904"
+    },
+    {
+        "rent_station": "捷運行天宮站(3號出口)",
+        "return_station": "光華商場",
+        "rent_lat": "25.05992",
+        "rent_lon": "121.5333",
+        "end_lat": "25.04478",
+        "end_lon": "121.53274",
+        "frequency": "599"
+    },
+    {
+        "rent_station": "捷運行天宮站(3號出口)",
+        "return_station": "建國農安街口",
+        "rent_lat": "25.05992",
+        "rent_lon": "121.5333",
+        "end_lat": "25.06503",
+        "end_lon": "121.53678",
+        "frequency": "555"
+    },
+    {
+        "rent_station": "捷運行天宮站(3號出口)",
+        "return_station": "捷運中山國中站",
+        "rent_lat": "25.05992",
+        "rent_lon": "121.5333",
+        "end_lat": "25.06106",
+        "end_lon": "121.54406",
+        "frequency": "559"
+    },
+    {
+        "rent_station": "捷運行天宮站(3號出口)",
+        "return_station": "捷運行天宮站(3號出口)",
+        "rent_lat": "25.05992",
+        "rent_lon": "121.5333",
+        "end_lat": "25.05992",
+        "end_lon": "121.5333",
+        "frequency": "3530"
+    },
+    {
+        "rent_station": "捷運行天宮站(3號出口)",
+        "return_station": "第二果菜批發市場",
+        "rent_lat": "25.05992",
+        "rent_lon": "121.5333",
+        "end_lat": "25.06642",
+        "end_lon": "121.53735",
+        "frequency": "1128"
+    },
+    {
+        "rent_station": "捷運行政大樓",
+        "return_station": "捷運行政大樓",
+        "rent_lat": "25.05575",
+        "rent_lon": "121.52168",
+        "end_lat": "25.05575",
+        "end_lon": "121.52168",
+        "frequency": "917"
+    },
+    {
+        "rent_station": "捷運西湖站(1號出口)",
+        "return_station": "捷運西湖站(1號出口)",
+        "rent_lat": "25.08301",
+        "rent_lon": "121.56638",
+        "end_lat": "25.08301",
+        "end_lon": "121.56638",
+        "frequency": "2224"
+    },
+    {
+        "rent_station": "捷運西門站(2號出口)",
+        "return_station": "捷運西門站(2號出口)",
+        "rent_lat": "25.0416",
+        "rent_lon": "121.50842",
+        "end_lat": "25.0416",
+        "end_lon": "121.50842",
+        "frequency": "815"
+    },
+    {
+        "rent_station": "捷運西門站(3號出口)",
+        "return_station": "捷運西門站(3號出口)",
+        "rent_lat": "25.04178",
+        "rent_lon": "121.50869",
+        "end_lat": "25.04178",
+        "end_lon": "121.50869",
+        "frequency": "957"
+    },
+    {
+        "rent_station": "捷運西門站(5號出口)",
+        "return_station": "捷運西門站(5號出口)",
+        "rent_lat": "25.04244",
+        "rent_lon": "121.50864",
+        "end_lat": "25.04244",
+        "end_lon": "121.50864",
+        "frequency": "653"
+    },
+    {
+        "rent_station": "捷運象山站(2號出口)",
+        "return_station": "吳興公車總站",
+        "rent_lat": "25.03222",
+        "rent_lon": "121.56974",
+        "end_lat": "25.02388",
+        "end_lon": "121.56984",
+        "frequency": "1112"
+    },
+    {
+        "rent_station": "捷運象山站(2號出口)",
+        "return_station": "捷運象山站(2號出口)",
+        "rent_lat": "25.03222",
+        "rent_lon": "121.56974",
+        "end_lat": "25.03222",
+        "end_lon": "121.56974",
+        "frequency": "1642"
+    },
+    {
+        "rent_station": "捷運象山站(2號出口)",
+        "return_station": "泰和公園",
+        "rent_lat": "25.03222",
+        "rent_lon": "121.56974",
+        "end_lat": "25.0193",
+        "end_lon": "121.57105",
+        "frequency": "1732"
+    },
+    {
+        "rent_station": "捷運象山站(2號出口)",
+        "return_station": "象山公園",
+        "rent_lat": "25.03222",
+        "rent_lon": "121.56974",
+        "end_lat": "25.02863",
+        "end_lon": "121.56981",
+        "frequency": "598"
+    },
+    {
+        "rent_station": "捷運象山站(3號出口)",
+        "return_station": "捷運象山站(3號出口)",
+        "rent_lat": "25.03295",
+        "rent_lon": "121.5712",
+        "end_lat": "25.03295",
+        "end_lon": "121.5712",
+        "frequency": "1305"
+    },
+    {
+        "rent_station": "捷運辛亥站",
+        "return_station": "捷運辛亥站",
+        "rent_lat": "25.00467",
+        "rent_lon": "121.55684",
+        "end_lat": "25.00467",
+        "end_lon": "121.55684",
+        "frequency": "945"
+    },
+    {
+        "rent_station": "捷運關渡站(1號出口)",
+        "return_station": "捷運關渡站(1號出口)",
+        "rent_lat": "25.12397",
+        "rent_lon": "121.46712",
+        "end_lat": "25.12397",
+        "end_lon": "121.46712",
+        "frequency": "3955"
+    },
+    {
+        "rent_station": "捷運關渡站(1號出口)",
+        "return_station": "關渡宮",
+        "rent_lat": "25.12397",
+        "rent_lon": "121.46712",
+        "end_lat": "25.11739",
+        "end_lon": "121.46288",
+        "frequency": "1367"
+    },
+    {
+        "rent_station": "捷運關渡站(1號出口)",
+        "return_station": "關渡自然公園",
+        "rent_lat": "25.12397",
+        "rent_lon": "121.46712",
+        "end_lat": "25.11884",
+        "end_lon": "121.46912",
+        "frequency": "693"
+    },
+    {
+        "rent_station": "捷運關渡站(1號出口)",
+        "return_station": "關渡醫院",
+        "rent_lat": "25.12397",
+        "rent_lon": "121.46712",
+        "end_lat": "25.1203",
+        "end_lon": "121.4665",
+        "frequency": "652"
+    },
+    {
+        "rent_station": "捷運雙連站(2號出口)",
+        "return_station": "大稻埕碼頭",
+        "rent_lat": "25.05826",
+        "rent_lon": "121.52063",
+        "end_lat": "25.05662",
+        "end_lon": "121.50783",
+        "frequency": "868"
+    },
+    {
+        "rent_station": "捷運雙連站(2號出口)",
+        "return_station": "捷運雙連站(2號出口)",
+        "rent_lat": "25.05826",
+        "rent_lon": "121.52063",
+        "end_lat": "25.05826",
+        "end_lon": "121.52063",
+        "frequency": "5014"
+    },
+    {
+        "rent_station": "捷運雙連站(2號出口)",
+        "return_station": "永樂市場",
+        "rent_lat": "25.05826",
+        "rent_lon": "121.52063",
+        "end_lat": "25.05454",
+        "end_lon": "121.51052",
+        "frequency": "826"
+    },
+    {
+        "rent_station": "捷運麟光站(2號出口)",
+        "return_station": "捷運麟光站(2號出口)",
+        "rent_lat": "25.0181",
+        "rent_lon": "121.55929",
+        "end_lat": "25.0181",
+        "end_lon": "121.55929",
+        "frequency": "2270"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "南機場夜市(中華路二段)",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02886",
+        "end_lon": "121.50518",
+        "frequency": "752"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "寶興長泰街口(西南角)",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.0216",
+        "end_lon": "121.49597",
+        "frequency": "654"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "德昌寶興街口(西北角)",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02365",
+        "end_lon": "121.49528",
+        "frequency": "999"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "忠德公園",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02516",
+        "end_lon": "121.49604",
+        "frequency": "649"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "捷運龍山寺站(1號出口)",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.03535",
+        "end_lon": "121.49938",
+        "frequency": "3928"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "捷運龍山寺站(1號出口)_1",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.03548",
+        "end_lon": "121.50026",
+        "frequency": "709"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "東園國小",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02257",
+        "end_lon": "121.49807",
+        "frequency": "692"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "華江八號公園",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.03388",
+        "end_lon": "121.49293",
+        "frequency": "621"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "華江高中",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02744",
+        "end_lon": "121.49619",
+        "frequency": "780"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "華西公園",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.03852",
+        "end_lon": "121.49881",
+        "frequency": "826"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "錦德公園",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02332",
+        "end_lon": "121.49264",
+        "frequency": "929"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)",
+        "return_station": "雙園國中",
+        "rent_lat": "25.03535",
+        "rent_lon": "121.49938",
+        "end_lat": "25.02673",
+        "end_lon": "121.49176",
+        "frequency": "818"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)_1",
+        "return_station": "捷運龍山寺站(1號出口)",
+        "rent_lat": "25.03548",
+        "rent_lon": "121.50026",
+        "end_lat": "25.03535",
+        "end_lon": "121.49938",
+        "frequency": "621"
+    },
+    {
+        "rent_station": "捷運龍山寺站(1號出口)_1",
+        "return_station": "捷運龍山寺站(1號出口)_1",
+        "rent_lat": "25.03548",
+        "rent_lon": "121.50026",
+        "end_lat": "25.03548",
+        "end_lon": "121.50026",
+        "frequency": "1052"
+    },
+    {
+        "rent_station": "捷運龍山寺站(3號出口)",
+        "return_station": "捷運龍山寺站(3號出口)",
+        "rent_lat": "25.03509",
+        "rent_lon": "121.50199",
+        "end_lat": "25.03509",
+        "end_lon": "121.50199",
+        "frequency": "844"
+    },
+    {
+        "rent_station": "撫順公園",
+        "return_station": "撫順公園",
+        "rent_lat": "25.06416",
+        "rent_lon": "121.52203",
+        "end_lat": "25.06416",
+        "end_lon": "121.52203",
+        "frequency": "1413"
+    },
+    {
+        "rent_station": "撫順街41巷(崇德宮前)",
+        "return_station": "撫順街41巷(崇德宮前)",
+        "rent_lat": "25.06389",
+        "rent_lon": "121.51916",
+        "end_lat": "25.06389",
+        "end_lon": "121.51916",
+        "frequency": "765"
+    },
+    {
+        "rent_station": "敦化八德路口",
+        "return_station": "敦化八德路口",
+        "rent_lat": "25.04802",
+        "rent_lon": "121.54864",
+        "end_lat": "25.04802",
+        "end_lon": "121.54864",
+        "frequency": "643"
+    },
+    {
+        "rent_station": "敦化北路155巷口",
+        "return_station": "敦化北路155巷口",
+        "rent_lat": "25.0542",
+        "rent_lon": "121.5491",
+        "end_lat": "25.0542",
+        "end_lon": "121.5491",
+        "frequency": "599"
+    },
+    {
+        "rent_station": "敦化南路二段103巷口",
+        "return_station": "敦化南路二段103巷口",
+        "rent_lat": "25.0287",
+        "rent_lon": "121.54904",
+        "end_lat": "25.0287",
+        "end_lon": "121.54904",
+        "frequency": "773"
+    },
+    {
+        "rent_station": "敦化南路二段81巷",
+        "return_station": "敦化南路二段81巷",
+        "rent_lat": "25.03002",
+        "rent_lon": "121.54893",
+        "end_lat": "25.03002",
+        "end_lon": "121.54893",
+        "frequency": "682"
+    },
+    {
+        "rent_station": "敦化基隆路口",
+        "return_station": "敦化基隆路口",
+        "rent_lat": "25.02215",
+        "rent_lon": "121.54839",
+        "end_lat": "25.02215",
+        "end_lon": "121.54839",
+        "frequency": "1044"
+    },
+    {
+        "rent_station": "敦化市民路口",
+        "return_station": "敦化市民路口",
+        "rent_lat": "25.04405",
+        "rent_lon": "121.5486",
+        "end_lat": "25.04405",
+        "end_lon": "121.5486",
+        "frequency": "1184"
+    },
+    {
+        "rent_station": "敦化長春路口",
+        "return_station": "敦化長春路口",
+        "rent_lat": "25.0536",
+        "rent_lon": "121.54871",
+        "end_lat": "25.0536",
+        "end_lon": "121.54871",
+        "frequency": "866"
+    },
+    {
+        "rent_station": "敦北公園",
+        "return_station": "敦北公園",
+        "rent_lat": "25.06118",
+        "rent_lon": "121.55098",
+        "end_lat": "25.06118",
+        "end_lon": "121.55098",
+        "frequency": "969"
+    },
+    {
+        "rent_station": "敦親公園",
+        "return_station": "敦親公園",
+        "rent_lat": "25.02347",
+        "rent_lon": "121.54108",
+        "end_lat": "25.02347",
+        "end_lon": "121.54108",
+        "frequency": "2518"
+    },
+    {
+        "rent_station": "敬業三樂群三路口(西北側)",
+        "return_station": "敬業三樂群三路口(西北側)",
+        "rent_lat": "25.08272",
+        "rent_lon": "121.55624",
+        "end_lat": "25.08272",
+        "end_lon": "121.55624",
+        "frequency": "536"
+    },
+    {
+        "rent_station": "文化三杏林一路口",
+        "return_station": "文化三杏林一路口",
+        "rent_lat": "25.14058",
+        "rent_lon": "121.49915",
+        "end_lat": "25.14058",
+        "end_lon": "121.49915",
+        "frequency": "1081"
+    },
+    {
+        "rent_station": "文山第二行政中心",
+        "return_station": "文山第二行政中心",
+        "rent_lat": "25.00115",
+        "rent_lon": "121.55142",
+        "end_lat": "25.00115",
+        "end_lon": "121.55142",
+        "frequency": "1139"
+    },
+    {
+        "rent_station": "文山行政中心",
+        "return_station": "文山行政中心",
+        "rent_lat": "24.98959",
+        "rent_lon": "121.56959",
+        "end_lat": "24.98959",
+        "end_lon": "121.56959",
+        "frequency": "1003"
+    },
+    {
+        "rent_station": "文山運動中心",
+        "return_station": "文山運動中心",
+        "rent_lat": "24.99676",
+        "rent_lon": "121.5596",
+        "end_lat": "24.99676",
+        "end_lon": "121.5596",
+        "frequency": "1348"
+    },
+    {
+        "rent_station": "文德三號公園(江南街71巷16弄)",
+        "return_station": "文德三號公園(江南街71巷16弄)",
+        "rent_lat": "25.07524",
+        "rent_lon": "121.5772",
+        "end_lat": "25.07524",
+        "end_lon": "121.5772",
+        "frequency": "1127"
+    },
+    {
+        "rent_station": "文德二號公園(北側)",
+        "return_station": "文德二號公園(北側)",
+        "rent_lat": "25.07758",
+        "rent_lon": "121.58381",
+        "end_lat": "25.07758",
+        "end_lon": "121.58381",
+        "frequency": "1574"
+    },
+    {
+        "rent_station": "文德二號公園(南側)",
+        "return_station": "文德二號公園(南側)",
+        "rent_lat": "25.07504",
+        "rent_lon": "121.58375",
+        "end_lat": "25.07504",
+        "end_lon": "121.58375",
+        "frequency": "762"
+    },
+    {
+        "rent_station": "文林建民路口",
+        "return_station": "文林建民路口",
+        "rent_lat": "25.10788",
+        "rent_lon": "121.51457",
+        "end_lat": "25.10788",
+        "end_lon": "121.51457",
+        "frequency": "1217"
+    },
+    {
+        "rent_station": "文林福華路口",
+        "return_station": "文林福華路口",
+        "rent_lat": "25.10094",
+        "rent_lon": "121.52243",
+        "end_lat": "25.10094",
+        "end_lon": "121.52243",
+        "frequency": "1712"
+    },
+    {
+        "rent_station": "文湖國小",
+        "return_station": "文湖國小",
+        "rent_lat": "25.08637",
+        "rent_lon": "121.56088",
+        "end_lat": "25.08637",
+        "end_lon": "121.56088",
+        "frequency": "2848"
+    },
+    {
+        "rent_station": "文湖街21巷118弄口",
+        "return_station": "文湖街21巷118弄口",
+        "rent_lat": "25.09122",
+        "rent_lon": "121.55961",
+        "end_lat": "25.09122",
+        "end_lon": "121.55961",
+        "frequency": "1016"
+    },
+    {
+        "rent_station": "文湖街81巷10號西側",
+        "return_station": "文湖街81巷10號西側",
+        "rent_lat": "25.08707",
+        "rent_lon": "121.56406",
+        "end_lat": "25.08707",
+        "end_lon": "121.56406",
+        "frequency": "1461"
+    },
+    {
+        "rent_station": "新和國小",
+        "return_station": "新和國小",
+        "rent_lat": "25.02582",
+        "rent_lon": "121.50255",
+        "end_lat": "25.02582",
+        "end_lon": "121.50255",
+        "frequency": "2970"
+    },
+    {
+        "rent_station": "新喜公園",
+        "return_station": "新喜公園",
+        "rent_lat": "25.06533",
+        "rent_lon": "121.53177",
+        "end_lat": "25.06533",
+        "end_lon": "121.53177",
+        "frequency": "1131"
+    },
+    {
+        "rent_station": "新奇岩社會住宅",
+        "return_station": "新奇岩社會住宅",
+        "rent_lat": "25.12287",
+        "rent_lon": "121.5037",
+        "end_lat": "25.12287",
+        "end_lon": "121.5037",
+        "frequency": "944"
+    },
+    {
+        "rent_station": "新新公園(昆陽街60巷)",
+        "return_station": "新新公園(昆陽街60巷)",
+        "rent_lat": "25.0521",
+        "rent_lon": "121.59053",
+        "end_lat": "25.0521",
+        "end_lon": "121.59053",
+        "frequency": "617"
+    },
+    {
+        "rent_station": "新明成功路口",
+        "return_station": "新明成功路口",
+        "rent_lat": "25.06058",
+        "rent_lon": "121.5911",
+        "end_lat": "25.06058",
+        "end_lon": "121.5911",
+        "frequency": "606"
+    },
+    {
+        "rent_station": "新東公園",
+        "return_station": "新東公園",
+        "rent_lat": "25.05925",
+        "rent_lon": "121.56888",
+        "end_lat": "25.05925",
+        "end_lon": "121.56888",
+        "frequency": "6460"
+    },
+    {
+        "rent_station": "新東街51巷口",
+        "return_station": "新東街51巷口",
+        "rent_lat": "25.0615",
+        "rent_lon": "121.56332",
+        "end_lat": "25.0615",
+        "end_lon": "121.56332",
+        "frequency": "743"
+    },
+    {
+        "rent_station": "新生公園",
+        "return_station": "新生公園",
+        "rent_lat": "25.06839",
+        "rent_lon": "121.53032",
+        "end_lat": "25.06839",
+        "end_lon": "121.53032",
+        "frequency": "2048"
+    },
+    {
+        "rent_station": "新生南路一段119巷口",
+        "return_station": "新生南路一段119巷口",
+        "rent_lat": "25.04003",
+        "rent_lon": "121.53299",
+        "end_lat": "25.04003",
+        "end_lon": "121.53299",
+        "frequency": "2144"
+    },
+    {
+        "rent_station": "新生南路三段52號前",
+        "return_station": "新生南路三段52號前",
+        "rent_lat": "25.02112",
+        "rent_lon": "121.53407",
+        "end_lat": "25.02112",
+        "end_lon": "121.53407",
+        "frequency": "1080"
+    },
+    {
+        "rent_station": "新生南路三段66號前",
+        "return_station": "新生南路三段66號前",
+        "rent_lat": "25.01976",
+        "rent_lon": "121.53384",
+        "end_lat": "25.01976",
+        "end_lon": "121.53384",
+        "frequency": "1647"
+    },
+    {
+        "rent_station": "新生南路三段66號前",
+        "return_station": "臺灣科技大學後門",
+        "rent_lat": "25.01976",
+        "rent_lon": "121.53384",
+        "end_lat": "25.01182",
+        "end_lon": "121.54165",
+        "frequency": "556"
+    },
+    {
+        "rent_station": "新生南路三段82號前",
+        "return_station": "捷運公館站(2號出口)",
+        "rent_lat": "25.01894",
+        "rent_lon": "121.53361",
+        "end_lat": "25.01491",
+        "end_lon": "121.53438",
+        "frequency": "593"
+    },
+    {
+        "rent_station": "新生南路三段82號前",
+        "return_station": "捷運科技大樓站",
+        "rent_lat": "25.01894",
+        "rent_lon": "121.53361",
+        "end_lat": "25.02605",
+        "end_lon": "121.5436",
+        "frequency": "732"
+    },
+    {
+        "rent_station": "新生南路三段82號前",
+        "return_station": "新生南路三段82號前",
+        "rent_lat": "25.01894",
+        "rent_lon": "121.53361",
+        "end_lat": "25.01894",
+        "end_lon": "121.53361",
+        "frequency": "2013"
+    }
+]

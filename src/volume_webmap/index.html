@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第103林班 Pléiades 影像與材積空間查詢；劃設範圍即可計算模型推估材積。">
+  <meta name="theme-color" content="#244b3d">
+  <title>第 103 林班｜材積空間查詢</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.34/esri/themes/light/main.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://js.arcgis.com/4.34/"></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="page-header">
+    <div class="identity"><span class="brand-mark" aria-hidden="true">103</span><div><span class="eyebrow">PLÉIADES · FOREST VOLUME</span><h1>材積空間查詢</h1></div></div>
+    <span id="load-status" class="status" role="status">正在載入地圖…</span>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar" aria-label="材積查詢與結果">
+      <section class="intro">
+        <span class="section-kicker">第 103 林班 · F–I 周邊</span>
+        <h2>劃設範圍，查詢材積</h2>
+        <p>使用地圖左上角的矩形或多邊形工具，完成後自動計算；點選範圍可調整邊界。</p>
+      </section>
+      <div class="action-row">
+        <button id="query-view" class="primary" disabled>查詢參考範圍</button>
+        <button id="clear-selection" disabled>清除選取</button>
+      </div>
+      <section class="zones-section" aria-label="快速查詢調查區">
+        <div class="section-label">快速查詢調查區</div>
+        <div id="zone-buttons" class="zone-buttons"><button data-zone="F" disabled>F 區</button><button data-zone="G" disabled>G 區</button><button data-zone="H" disabled>H 區</button><button data-zone="I" disabled>I 區</button></div>
+      </section>
+      <section class="result-card" aria-label="材積計算結果" aria-live="polite">
+        <div class="result-heading"><span id="selection-name">尚未選取範圍</span><span class="estimate-badge">Pléiades 推估</span></div>
+        <div class="volume-value"><strong id="volume-value">—</strong><span>m³</span></div>
+        <dl class="metrics">
+          <div><dt>選取面積</dt><dd><span id="selection-area">—</span> ha</dd></div>
+          <div><dt>可計算面積</dt><dd><span id="covered-area">—</span> ha</dd></div>
+          <div><dt>平均材積密度</dt><dd><span id="density-value">—</span> m³/ha</dd></div>
+          <div><dt>資料涵蓋率</dt><dd><span id="coverage-value">—</span> %</dd></div>
+        </dl>
+        <p id="selection-hint" class="result-hint">框選範圍，或點選上方 F–I 調查區。</p>
+        <button id="download-result" class="download-button" disabled>下載查詢結果 CSV <span aria-hidden="true">↓</span></button>
+      </section>
+      <section class="layer-section" aria-label="圖層設定">
+        <div class="section-label">圖層</div>
+        <p class="active-layer"><span class="layer-dot volume-dot"></span><strong id="active-layer-name">Fusion Pléiades RGB</strong></p>
+        <label class="opacity-row" for="volume-opacity"><span>不透明度</span><input id="volume-opacity" type="range" min="0" max="100" value="100"><output id="opacity-value">100%</output></label>
+        <label class="toggle-row"><span><span class="layer-dot boundary-dot"></span>F–I 調查區界</span><input id="show-zones" type="checkbox" checked></label>
+        <p class="lazy-note"><span class="live-dot"></span>僅載入可見圖磚 · 框選後讀取材積</p>
+      </section>
+      <details class="method-note"><summary>資料與計算方法</summary><p>衛星底圖為 Esri World Imagery。RGB、CHM 與材積為同範圍 Pléiades 資料，採標準地理圖磚，依視野載入。</p><p>材積使用 Pléiades 影像推估的樹冠高度，搭配 F–I 調查材積建立簡單回歸，再逐格推估。</p><a href="./data/volume_pleiades_10m.tif" download>下載 Pléiades 推估材積 raster</a></details>
+    </aside>
+    <section class="map-region" aria-label="互動材積地圖">
+      <div id="view-div" aria-label="第103林班衛星影像；使用矩形或多邊形工具選取"></div>
+      <button id="reset-view" class="reset-view" disabled title="回到參考圖的視野">↗ 回原視野</button>
+      <div class="map-layer-tabs" role="group" aria-label="切換地理圖層">
+        <button data-layer="satellite" aria-pressed="false" disabled>衛星</button>
+        <button data-layer="rgb" class="active" aria-pressed="true" disabled>RGB</button>
+        <button data-layer="chm" aria-pressed="false" disabled>CHM</button>
+        <button data-layer="volume" aria-pressed="false" disabled>推估材積</button>
+      </div>
+      <div id="map-notice" class="map-notice" role="status">矩形：拖曳框選　·　多邊形：逐點選取，雙擊完成</div>
+      <div class="legend" id="volume-legend" hidden><div class="legend-heading"><span id="legend-title">材積</span><span id="legend-unit">m³／10 m 格</span></div><div class="legend-gradient"></div><div class="legend-labels"><span>0</span><span id="legend-max">—</span></div></div>
+      <div id="load-error" class="load-error" role="alert" hidden>地圖資料載入失敗，請確認網路連線後重新整理。<button onclick="location.reload()">重新載入</button></div>
+    </section>
+  </main>
+  <noscript>請啟用 JavaScript 以使用互動地圖。</noscript>
+</body>
+</html>

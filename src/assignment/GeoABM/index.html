@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>離岸風機人工魚礁效應ABM模擬</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet (basemap) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        canvas { touch-action: none; }
+        .phase-btn.active { background-color: #0f172a; color: white; border-color: #0f172a; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .scenario-btn { transition: all 0.2s; }
+        .scenario-btn:hover { transform: translateY(-1px); shadow: md; }
+        
+        /* Custom Range Slider */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #3b82f6; cursor: pointer; margin-top: -6px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px; }
+
+        /* Tooltip */
+        #tooltip { pointer-events: none; transition: opacity 0.2s; }
+        
+        /* Modal */
+        .modal { transition: opacity 0.3s ease-in-out; }
+        .modal-content { transform: scale(0.95); transition: transform 0.3s ease-in-out; }
+        .modal.show .modal-content { transform: scale(1); }
+        
+        /* Advanced Section Transition */
+        #advancedSection, #expAdvancedSection { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; overflow: hidden; max-height: 0; opacity: 0; }
+        #advancedSection.open, #expAdvancedSection.open { max-height: 800px; opacity: 1; }
+    
+        /* Basemap under simulation canvas */
+        #baseMap { position: absolute; inset: 0; z-index: 0; }
+        #simCanvas { position: absolute; inset: 0; z-index: 10; }
+        #tooltip, #overlayInfo { z-index: 20; }
+
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 p-3 flex justify-between items-center shadow-sm z-20 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 text-white p-1.5 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800 leading-tight">離岸風機人工魚礁效應ABM模擬</h1>
+                <p class="text-xs text-slate-500">R14228007 張自成</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <!-- Speed Control -->
+            <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+                <span class="text-xs font-bold text-slate-500">模擬速度:</span>
+                <input type="range" id="speedSlider" min="1" max="10" value="1" class="w-24">
+                <span id="speedDisplay" class="text-xs font-mono w-6 text-right text-slate-600">1x</span>
+            </div>
+            
+            <!-- Sensitivity Analysis Button -->
+            <button onclick="toggleAnalysisModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-full text-xs font-bold transition shadow-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                敏感性分析 (BehaviorSpace)
+            </button>
+
+            <div class="h-6 w-px bg-slate-200"></div>
+
+            
+            <!-- Turbine Upload (Points) -->
+            <input id="turbineFileInput" type="file" accept=".zip,.geojson,.json" class="hidden"/>
+            <button onclick="openTurbineUploader()" class="bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm flex items-center gap-2 hover:bg-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                上傳風機點位
+            </button>
+            <button onclick="restoreDefaultTurbines()" class="text-slate-500 hover:text-slate-800 text-sm font-medium transition">回復預設風機</button>
+
+            <button onclick="resetSimulation()" class="text-slate-500 hover:text-slate-800 text-sm font-medium transition">重置</button>
+            <button id="pauseBtn" onclick="togglePause()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-1.5 rounded-full text-sm font-medium transition shadow-sm">暫停</button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 flex-col lg:flex-row overflow-hidden">
+        
+        <!-- Left: Controls -->
+        <aside class="w-full lg:w-72 bg-white border-r border-slate-200 p-5 overflow-y-auto shrink-0 flex flex-col gap-6 z-10">
+            
+            <!-- Phase Selection -->
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">1. 開發階段</h3>
+                <div class="flex flex-col gap-2">
+                    <button onclick="setPhase('pre')" id="btn-pre" class="phase-btn active px-4 py-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-left transition group">
+                        <span class="block text-sm font-bold group-hover:text-blue-600 transition-colors">A. 施工前 (基線)</span>
+                        <span class="text-[10px] text-slate-400">生態原始狀態</span>
+                    </button>
+                    <button onclick="setPhase('construction')" id="btn-construction" class="phase-btn px-4 py-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-left transition group">
+                        <span class="block text-sm font-bold group-hover:text-blue-600 transition-colors">B. 施工中 (擾動)</span>
+                        <span class="text-[10px] text-slate-400">噪音驅離效應</span>
+                    </button>
+                    <button onclick="setPhase('operation')" id="btn-operation" class="phase-btn px-4 py-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-left transition group">
+                        <span class="block text-sm font-bold group-hover:text-blue-600 transition-colors">C. 營運後 (魚礁+限漁)</span>
+                        <span class="text-[10px] text-slate-400">附著生物 -> 外溢效應</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Parameters Adjustment -->
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">2. 參數調整</h3>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                    
+                    <!-- Base Carrying Capacity -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>環境最大魚量 (K)</span>
+                            <span id="fishTotalDisplay" class="text-slate-500">200</span>
+                        </div>
+                        <input type="range" id="fishTotalSlider" min="50" max="500" step="10" value="200" class="w-full">
+                    </div>
+
+                    <!-- Fish Recovery Rate -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>魚類恢復速度</span>
+                            <span id="recoveryDisplay" class="text-slate-500">1.0x</span>
+                        </div>
+                        <input type="range" id="recoverySlider" min="0.0" max="2.0" step="0.1" value="1.0" class="w-full">
+                    </div>
+
+                    <!-- Boat Count -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>漁船數量</span>
+                            <span id="boatCountDisplay" class="text-slate-500">20</span>
+                        </div>
+                        <input type="range" id="boatCountSlider" min="0" max="20" step="1" value="20" class="w-full">
+                    </div>
+
+                    <!-- Compliance -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>漁船守法程度</span>
+                            <span id="complianceDisplay" class="text-indigo-600">60%</span>
+                        </div>
+                        <input type="range" id="complianceSlider" min="0" max="1" step="0.1" value="0.6" class="w-full">
+                        <div class="text-[9px] text-slate-400 mt-1">機率越低，偷入風場機率越高</div>
+                    </div>
+
+                    <!-- Microbial Adhesion (Fouling) -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>微生物附著率</span>
+                            <span id="foulingDisplay" class="text-emerald-600">100%</span>
+                        </div>
+                        <input type="range" id="foulingSlider" min="0" max="1" step="0.01" value="1.0" class="w-full">
+                    </div>
+                </div>
+
+                <!-- Advanced Settings Toggle -->
+                <button onclick="toggleAdvanced()" class="w-full mt-4 flex items-center justify-between text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition">
+                    <span>⚙️ 進階參數 (Advanced)</span>
+                    <svg id="advArrow" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+
+                <!-- Advanced Settings Content -->
+                <div id="advancedSection" class="bg-slate-50 px-4 rounded-b-xl border-x border-b border-slate-200 space-y-4">
+                    <div class="pt-4">
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>魚類壽命 (Lifespan)</span>
+                            <span id="fishLifeDisplay" class="text-slate-500">3000</span>
+                        </div>
+                        <input type="range" id="fishLifeSlider" min="500" max="10000" step="100" value="3000" class="w-full">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>漁船續航力 (Fuel)</span>
+                            <span id="boatLifeDisplay" class="text-slate-500">2000</span>
+                        </div>
+                        <input type="range" id="boatLifeSlider" min="500" max="5000" step="100" value="2000" class="w-full">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>漁船貨艙 (Capacity)</span>
+                            <span id="boatCapDisplay" class="text-slate-500">100</span>
+                        </div>
+                        <input type="range" id="boatCapSlider" min="10" max="500" step="10" value="100" class="w-full">
+                    </div>
+                    
+                    <div class="pb-4">
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                            <span>風機負載 (Turbine Cap)</span>
+                            <span id="turbineCapDisplay" class="text-slate-500">10</span>
+                        </div>
+                        <input type="range" id="turbineCapSlider" min="5" max="50" step="1" value="10" class="w-full">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center: Simulation Canvas -->
+        <main class="flex-1 relative bg-slate-100 flex flex-col items-center justify-center p-6 overflow-hidden">
+            <div class="relative w-full h-full max-w-5xl max-h-[80vh] bg-[#7aa4a0] shadow-xl rounded-2xl overflow-hidden border-4 border-white ring-1 ring-slate-200">
+                <div id="baseMap"></div>
+                <canvas id="simCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+                
+                <!-- Tooltip -->
+                <div id="tooltip" class="absolute hidden top-0 left-0 bg-slate-900/90 text-white text-[10px] p-2 rounded-lg shadow-xl border border-slate-700 z-50 min-w-[120px]">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <!-- Overlay Info -->
+                <div class="absolute top-4 left-4 pointer-events-none">
+                    <div class="bg-white/95 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-slate-100 inline-block">
+                        <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Current Phase</div>
+                        <div id="phaseDisplay" class="text-sm font-bold text-slate-800">施工前</div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="absolute bottom-4 left-4 flex gap-2 pointer-events-none">
+                    <div class="bg-white/90 backdrop-blur px-3 py-2 rounded-lg shadow-sm text-[10px] font-medium text-slate-600 flex items-center gap-3">
+                        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-500"></span> 魚群</div>
+                        <div class="flex items-center gap-1.5"><span class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[6px] border-b-rose-500"></span> 守法船</div>
+                        <div class="flex items-center gap-1.5"><span class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[6px] border-b-purple-800"></span> 違規船</div>
+                        <div class="flex items-center gap-1.5"><span class="w-2 h-2 bg-slate-400 rounded-full"></span> 滿載/時間到</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right: Analytics & System Dynamics -->
+        <div class="w-full lg:w-96 bg-white border-l border-slate-200 flex flex-col shrink-0 z-10 overflow-hidden">
+            <!-- 1. Causal Loop Diagram -->
+            <div class="h-3/5 flex flex-col border-b border-slate-100">
+                <div class="p-4 pb-2">
+                    <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <span>Causal Loop Diagram (CLD)</span>
+                    </h3>
+                </div>
+                <div class="flex-1 relative overflow-hidden bg-slate-50/50">
+                    <canvas id="cldCanvas" class="w-full h-full object-contain"></canvas>
+                </div>
+            </div>
+
+            <!-- 2. Statistical Charts -->
+            <div class="h-2/5 flex flex-col p-4 bg-white">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-sm font-bold text-slate-800">區域魚量變化 (Stock)</h3>
+                </div>
+                <div class="flex-1 relative w-full h-full min-h-0">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sensitivity Analysis Modal -->
+    <div id="analysisModal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white w-[600px] max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden modal-content">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">敏感性分析 (BehaviorSpace)</h3>
+                <button onclick="toggleAnalysisModal()" class="text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1">
+                <!-- Experiment Settings -->
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Replicates (次數)</label>
+                        <input type="number" id="expReplicates" value="30" class="w-full border border-slate-300 rounded px-2 py-1 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Burn-in (Ticks)</label>
+                        <input type="number" id="expBurnIn" value="1000" class="w-full border border-slate-300 rounded px-2 py-1 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Sampling (Ticks)</label>
+                        <input type="number" id="expSampling" value="2000" class="w-full border border-slate-300 rounded px-2 py-1 text-sm">
+                    </div>
+                </div>
+
+                <!-- Exp Advanced Toggle -->
+                <button onclick="toggleExpAdvanced()" class="w-full mb-4 flex items-center justify-between text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition">
+                    <span>⚙️ 進階實驗參數 (Advanced Config)</span>
+                    <svg id="expAdvArrow" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <!-- Exp Advanced Content (Including RQ Parameters) -->
+                <div id="expAdvancedSection" class="bg-slate-50 px-4 rounded-xl border border-slate-200 space-y-3 mb-6">
+                    <!-- RQ Core Params -->
+                    <div class="grid grid-cols-2 gap-3 pt-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-blue-600 mb-1">Boat Count (Base)</label>
+                            <input type="number" id="expBoatCount" value="50" min="0" max="20" class="w-full border border-blue-200 rounded px-2 py-1 text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-blue-600 mb-1">Recovery Rate (Base)</label>
+                            <input type="number" id="expRecovery" value="1.0" step="0.1" min="0" max="2.0" class="w-full border border-blue-200 rounded px-2 py-1 text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-indigo-600 mb-1">Compliance Rate (Base)</label>
+                            <input type="number" id="expCompliance" value="0.6" step="0.1" min="0" max="1.0" class="w-full border border-indigo-200 rounded px-2 py-1 text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Carrying Capacity (K)</label>
+                            <input type="number" id="expBaseK" value="200" class="w-full border border-slate-300 rounded px-2 py-1 text-xs">
+                        </div>
+                         <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Fouling Biomass</label>
+                            <input type="number" id="expFouling" value="1.0" step="0.1" class="w-full border border-slate-300 rounded px-2 py-1 text-xs">
+                        </div>
+                    </div>
+                    <hr class="border-slate-200">
+                    <!-- Agent Params -->
+                    <div class="grid grid-cols-2 gap-3 pb-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Fish Lifespan</label>
+                            <input type="number" id="expFishLife" value="3000" class="w-full border border-slate-200 rounded px-2 py-1 text-xs text-slate-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Boat Lifespan</label>
+                            <input type="number" id="expBoatLife" value="2000" class="w-full border border-slate-200 rounded px-2 py-1 text-xs text-slate-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Boat Capacity</label>
+                            <input type="number" id="expBoatCap" value="100" class="w-full border border-slate-200 rounded px-2 py-1 text-xs text-slate-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Turbine Capacity</label>
+                            <input type="number" id="expTurbineCap" value="10" class="w-full border border-slate-200 rounded px-2 py-1 text-xs text-slate-500">
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 mb-6">
+
+                <!-- Run Actions -->
+                <div class="space-y-4">
+                    <button onclick="runExperiment('Custom')" class="w-full bg-slate-800 hover:bg-slate-900 text-white px-4 py-3 rounded-xl text-sm font-bold shadow-md flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        執行自訂配置模擬 (Run Custom Config)
+                    </button>
+                    
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="p-4 border border-blue-100 bg-blue-50/50 rounded-lg flex justify-between items-center">
+                            <div>
+                                <h4 class="text-xs font-bold text-blue-800">開發階段影響 (Phase Effect)</h4>
+                                <div class="flex gap-2 mt-2">
+                                    <button onclick="runExperiment('Phase-A')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-[10px]">綜合效果 (A)</button>
+                                    <button onclick="runExperiment('Phase-B')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-[10px]">控制附著 (B)</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border border-indigo-100 bg-indigo-50/50 rounded-lg flex justify-between items-center">
+                            <div>
+                                <h4 class="text-xs font-bold text-indigo-800">守法程度影響 (Compliance Effect)</h4>
+                                <p class="text-[10px] text-slate-500">掃描 0.0 - 1.0 (間隔 0.2)</p>
+                            </div>
+                            <button onclick="runExperiment('Compliance')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded text-[10px] font-bold">執行分析</button>
+                        </div>
+                        <div class="p-4 border border-emerald-100 bg-emerald-50/50 rounded-lg flex justify-between items-center">
+                            <div>
+                                <h4 class="text-xs font-bold text-emerald-800">恢復率 vs 捕撈 (Recovery x Boat)</h4>
+                                <p class="text-[10px] text-slate-500">2D 掃描: R(0.2-2.0) x B(0-45)</p>
+                            </div>
+                            <button onclick="runExperiment('Recovery-Boat')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-[10px] font-bold">執行掃描</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress -->
+                <div id="expProgressContainer" class="hidden mt-6">
+                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                        <span id="expStatusText">Running...</span>
+                        <span id="expPercent">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2">
+                        <div id="expProgressBar" class="bg-slate-800 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 mt-2 text-center">請勿關閉視窗，完成後將自動下載 CSV</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Leaflet + Turf + Proj4 + Shpjs -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.10.0/proj4.min.js"
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.min.js"></script>
+
+    <script>
+        // --- Configuration & Constants ---
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const cldCanvas = document.getElementById('cldCanvas');
+        const cldCtx = cldCanvas.getContext('2d');
+        const tooltip = document.getElementById('tooltip');
+        
+        // World Physics
+        const WORLD_W = 1000;
+        const WORLD_H = 750;
+        const FARM_X = 300;
+        const FARM_Y = 200;
+        const FARM_W = 400;
+        const FARM_H = 350;
+        const BUFFER_DIST = 300;
+
+
+        // =========================
+        // Wind Farm: turbines (user upload) + boundary (buffer 2,000 m dissolve)
+        // Basemap: Carto light_nolabels
+        // =========================
+        const FARM_BUFFER_M = 2000;     // 風機範圍界線（buffer 2,000 m dissolve）
+        const NEAR_BUFFER_M = 300;      // 原模型的 BUFFER_DIST（改成真實距離：300 m 近場）
+        const DEFAULT_TURBINE_POINTS = {"type": "FeatureCollection", "name": "test_POIs", "features": [{"type": "Feature", "properties": {"id": 1, "name": "Point"}, "geometry": {"type": "Point", "coordinates": [120.906756480691, 24.882366318667117]}}, {"type": "Feature", "properties": {"id": 2, "name": "Point 1"}, "geometry": {"type": "Point", "coordinates": [120.89464996279948, 24.87326602146205]}}, {"type": "Feature", "properties": {"id": 3, "name": "Point 2"}, "geometry": {"type": "Point", "coordinates": [120.88488947654209, 24.865585686281356]}}, {"type": "Feature", "properties": {"id": 4, "name": "Point 3"}, "geometry": {"type": "Point", "coordinates": [120.89543583173823, 24.88151962555164]}}, {"type": "Feature", "properties": {"id": 5, "name": "Point 4"}, "geometry": {"type": "Point", "coordinates": [120.88473609399291, 24.873787018764276]}}, {"type": "Feature", "properties": {"id": 6, "name": "Point 5"}, "geometry": {"type": "Point", "coordinates": [120.89362231686616, 24.865724849690313]}}, {"type": "Feature", "properties": {"id": 7, "name": "Point 6"}, "geometry": {"type": "Point", "coordinates": [120.90495678481669, 24.87452739568108]}}, {"type": "Feature", "properties": {"id": 8, "name": "Point 7"}, "geometry": {"type": "Point", "coordinates": [120.88591487865978, 24.881026069364644]}}, {"type": "Feature", "properties": {"id": 9, "name": "Point 8"}, "geometry": {"type": "Point", "coordinates": [120.87993027958187, 24.878475997653762]}}, {"type": "Feature", "properties": {"id": 10, "name": "Point 9"}, "geometry": {"type": "Point", "coordinates": [120.89017663860919, 24.885303490807335]}}, {"type": "Feature", "properties": {"id": 11, "name": "Point 10"}, "geometry": {"type": "Point", "coordinates": [120.903505972919, 24.866958889244504]}}]};
+
+        let baseMap = null;            // Leaflet map instance (背景底圖)
+        let turbinePointsLonLat = DEFAULT_TURBINE_POINTS;  // FeatureCollection<Point> EPSG:4326
+        let farmBoundaryPoly = null;   // Feature<Polygon|MultiPolygon> EPSG:4326 (buffer 2km dissolve)
+        let farmOuterPoly = null;      // Feature<Polygon|MultiPolygon> EPSG:4326 (farmBoundary + NEAR_BUFFER)
+        let farmBoundaryLine = null;   // Feature<LineString|MultiLineString> for distance checks
+
+        const PROJ_TWD97_TM2_121 = "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs";
+        const PROJ_TWD97_TM2_119 = "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs";
+
+        function initBasemapIfNeeded() {
+            if (baseMap) return;
+            baseMap = L.map("baseMap", {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                tap: false
+            });
+            L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+                subdomains: "abcd",
+                maxZoom: 20
+            }).addTo(baseMap);
+        }
+
+        function isLonLat(coord) {
+            const x = coord[0], y = coord[1];
+            return Number.isFinite(x) && Number.isFinite(y) && Math.abs(x) <= 180 && Math.abs(y) <= 90;
+        }
+        function looksLikeTWD97(coord) {
+            const x = coord[0], y = coord[1];
+            return Number.isFinite(x) && Number.isFinite(y) && x > 50000 && x < 500000 && y > 2000000 && y < 3200000;
+        }
+        function projectToWGS84_TWD97(coord) {
+            const x = coord[0], y = coord[1];
+            // 先試 121，再試 119
+            const a = proj4(PROJ_TWD97_TM2_121, "WGS84", [x, y]);
+            if (a[0] >= 118 && a[0] <= 124 && a[1] >= 20 && a[1] <= 27) return a;
+            const b = proj4(PROJ_TWD97_TM2_119, "WGS84", [x, y]);
+            if (b[0] >= 118 && b[0] <= 124 && b[1] >= 20 && b[1] <= 27) return b;
+            return null;
+        }
+        function normalizeCoordToLonLat(coord) {
+            if (isLonLat(coord)) return coord;
+            if (looksLikeTWD97(coord)) {
+                const out = projectToWGS84_TWD97(coord);
+                if (out) return out;
+            }
+            return null;
+        }
+
+        function toPointFeatureCollection(geojson) {
+            const points = [];
+            function pushPoint(coord, props={}) {
+                const norm = normalizeCoordToLonLat(coord);
+                if (!norm) return;
+                points.push({
+                    type: "Feature",
+                    properties: props,
+                    geometry: { type: "Point", coordinates: [norm[0], norm[1]] }
+                });
+            }
+            function handleFeature(f, fallbackIndex) {
+                if (!f || !f.geometry) return;
+                const g = f.geometry;
+                const props = f.properties || {};
+                const name = props.name || props.Name || props.NAME || props.id || props.ID || `Turbine ${fallbackIndex}`;
+
+                if (g.type === "Point") {
+                    pushPoint(g.coordinates, { ...props, name });
+                    return;
+                }
+                if (g.type === "MultiPoint") {
+                    g.coordinates.forEach((c, i) => pushPoint(c, { ...props, name: `${name}_${i+1}` }));
+                    return;
+                }
+                // 其他幾何：取 centroid 當作點位（避免使用者上傳 polygon 卻沒點）
+                try {
+                    const centroid = turf.centroid(f);
+                    if (centroid?.geometry?.type === "Point") {
+                        pushPoint(centroid.geometry.coordinates, { ...props, name: `${name}_centroid` });
+                    }
+                } catch (e) {}
+            }
+
+            if (!geojson) return { type: "FeatureCollection", features: [] };
+            if (geojson.type === "FeatureCollection") {
+                geojson.features.forEach((f, idx) => handleFeature(f, idx+1));
+                return { type: "FeatureCollection", features: points };
+            }
+            if (geojson.type === "Feature") {
+                handleFeature(geojson, 1);
+                return { type: "FeatureCollection", features: points };
+            }
+            // geometry object
+            handleFeature({ type: "Feature", properties: {}, geometry: geojson }, 1);
+            return { type: "FeatureCollection", features: points };
+        }
+
+        function dissolveFarmBoundary(pointFC) {
+            const feats = pointFC?.features || [];
+            if (feats.length === 0) return null;
+            const km = FARM_BUFFER_M / 1000;
+            const buffers = feats.map(pt => turf.buffer(pt, km, { units: "kilometers" }));
+            let dissolved = null;
+            for (const b of buffers) {
+                if (!dissolved) { dissolved = b; continue; }
+                try {
+                    dissolved = turf.union(dissolved, b);
+                } catch (e) {
+                    // fallback：combine 仍保持單一 Feature（MultiPolygon）
+                    dissolved = turf.combine(turf.featureCollection([dissolved, b])).features[0];
+                }
+            }
+            dissolved.properties = { buffer_m: FARM_BUFFER_M, dissolve: true, source: "turbines" };
+            return dissolved;
+        }
+
+        function recomputeFarmGeometry() {
+            farmBoundaryPoly = dissolveFarmBoundary(turbinePointsLonLat);
+            if (farmBoundaryPoly) {
+                farmOuterPoly = turf.buffer(farmBoundaryPoly, NEAR_BUFFER_M / 1000, { units: "kilometers" });
+                farmBoundaryLine = turf.polygonToLine(farmBoundaryPoly);
+            } else {
+                farmOuterPoly = null;
+                farmBoundaryLine = null;
+            }
+        }
+
+        function fitBasemapToFarm() {
+            initBasemapIfNeeded();
+            if (!farmOuterPoly) {
+                baseMap.setView([23.8, 121.0], 7);
+                return;
+            }
+            const bb = turf.bbox(farmOuterPoly); // [minX, minY, maxX, maxY] in lon/lat
+            const bounds = L.latLngBounds([bb[1], bb[0]], [bb[3], bb[2]]);
+            baseMap.fitBounds(bounds, { padding: [20, 20] });
+        }
+
+        function containerPointToLonLat(x, y) {
+            if (!baseMap) return null;
+            const ll = baseMap.containerPointToLatLng([x, y]);
+            return [ll.lng, ll.lat];
+        }
+
+        function isInsideFarmByPixel(x, y) {
+            if (!farmBoundaryPoly || !baseMap) return (x > FARM_X && x < FARM_X+FARM_W && y > FARM_Y && y < FARM_Y+FARM_H);
+            const ll = containerPointToLonLat(x, y);
+            if (!ll) return false;
+            return turf.booleanPointInPolygon(turf.point(ll), farmBoundaryPoly);
+        }
+
+        function isNearFarmByPixel(x, y) {
+            if (!farmOuterPoly || !baseMap) return false;
+            const ll = containerPointToLonLat(x, y);
+            if (!ll) return false;
+            return turf.booleanPointInPolygon(turf.point(ll), farmOuterPoly);
+        }
+
+        function drawFarmBoundary(ctx) {
+            if (!farmBoundaryPoly || !baseMap) return;
+            ctx.save();
+            // Fill farm area by phase (原本用 fillRect，改成填多邊形)
+            if (state.phase === 'operation') ctx.fillStyle = 'rgba(16, 185, 129, 0.06)';
+            else if (state.phase === 'construction') ctx.fillStyle = 'rgba(239, 68, 68, 0.06)';
+            else ctx.fillStyle = 'rgba(255, 255, 255, 0.0)';
+
+            const geom = farmBoundaryPoly.geometry;
+            const polys = (geom.type === 'Polygon') ? [geom.coordinates] : geom.coordinates;
+            ctx.beginPath();
+            polys.forEach(rings => {
+                rings.forEach((ring, ringIdx) => {
+                    ring.forEach((c, i) => {
+                        const latlng = L.latLng(c[1], c[0]);
+                        const p = baseMap.latLngToContainerPoint(latlng);
+                        if (i === 0) ctx.moveTo(p.x, p.y);
+                        else ctx.lineTo(p.x, p.y);
+                    });
+                    ctx.closePath();
+                });
+            });
+            ctx.fill();
+
+            // Stroke boundary (2,000 m buffer dissolve)
+            ctx.strokeStyle = (state.phase === 'pre') ? 'rgba(148, 163, 184, 0.9)' : 'rgba(14, 165, 233, 0.95)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash(state.phase === 'pre' ? [6, 6] : []);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 近場範圍（NEAR_BUFFER_M）以虛線表示（可選）
+            if (farmOuterPoly) {
+                ctx.strokeStyle = 'rgba(234, 179, 8, 0.35)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 4]);
+                const og = farmOuterPoly.geometry;
+                const oPolys = (og.type === 'Polygon') ? [og.coordinates] : og.coordinates;
+                ctx.beginPath();
+                oPolys.forEach(rings => {
+                    rings.forEach(ring => {
+                        ring.forEach((c, i) => {
+                            const p = baseMap.latLngToContainerPoint(L.latLng(c[1], c[0]));
+                            if (i === 0) ctx.moveTo(p.x, p.y);
+                            else ctx.lineTo(p.x, p.y);
+                        });
+                        ctx.closePath();
+                    });
+                });
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            ctx.restore();
+        }
+
+        function applyTurbinesFromLonLat(pointFC, shouldReset=true) {
+            turbinePointsLonLat = pointFC;
+            recomputeFarmGeometry();
+            fitBasemapToFarm();
+            // 依照底圖投影，把 turbine 轉成畫布座標
+            state.turbines = [];
+            const feats = turbinePointsLonLat?.features || [];
+            feats.forEach((f, idx) => {
+                const lon = f.geometry.coordinates[0];
+                const lat = f.geometry.coordinates[1];
+                const p = baseMap.latLngToContainerPoint(L.latLng(lat, lon));
+                state.turbines.push(new Turbine(p.x, p.y, idx));
+            });
+            if (shouldReset) resetSimulation();
+        }
+
+        function openTurbineUploader() {
+            document.getElementById('turbineFileInput').click();
+        }
+
+        async function handleTurbineUploadFile(file) {
+            if (!file) return;
+            try {
+                let geojson = null;
+                const lname = file.name.toLowerCase();
+                if (lname.endsWith('.geojson') || lname.endsWith('.json')) {
+                    geojson = JSON.parse(await file.text());
+                } else if (lname.endsWith('.zip')) {
+                    geojson = await shp(await file.arrayBuffer());
+                } else {
+                    alert('不支援的檔案格式，請上傳 .zip / .geojson / .json');
+                    return;
+                }
+                const pointFC = toPointFeatureCollection(geojson);
+                if (!pointFC.features || pointFC.features.length === 0) {
+                    alert('檔案內找不到可用點位（Point / MultiPoint / centroid）');
+                    return;
+                }
+                // 清除舊風機，套用新點位
+                applyTurbinesFromLonLat(pointFC, true);
+            } catch (e) {
+                alert('上傳解析失敗：' + (e?.message || e));
+            }
+        }
+
+        function restoreDefaultTurbines() {
+            applyTurbinesFromLonLat(DEFAULT_TURBINE_POINTS, true);
+        }
+
+        
+        // Config Object for Dynamic Settings
+        const simConfig = {
+            turbineCapacity: 10,
+            boatCapacity: 100,
+            boatLifespan: 2000,
+            fishLifespan: 3000
+        };
+
+        // --- State Management ---
+        const state = {
+            phase: 'pre',
+            simSpeed: 1,
+            isRunning: true,
+            
+            // Parameters
+            baseCarryingCapacity: 200, 
+            fishRecoveryRate: 1.0,  // Default 1.0
+            boatCount: 50,          // Default 50
+            foulingBiomass: 1.0,    // Default 100%
+            complianceRate: 0.6,    // Default 60%
+            
+            // System Dynamics State
+            spilloverPressure: 0.0,
+            ecoTau: 300,
+            
+            // Stats Tracking
+            catchWindow: 0,      
+            cldCatchRate: 0,     
+
+            // Entities
+            turbines: [],
+            fish: [],
+            boats: [],
+            
+            // Analytics
+            time: 0,
+            metrics: { popInside: 0, popNear: 0, popOutside: 0 }
+        };
+
+        // --- Chart.js Setup ---
+        let mainChart;
+        function initChart() {
+            const ctxChart = document.getElementById('statsChart').getContext('2d');
+            mainChart = new Chart(ctxChart, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        { label: '區域內魚量', borderColor: '#ef4444', backgroundColor: '#ef4444', borderWidth: 2, radius: 0, data: [], tension: 0.4 },
+                        { label: '區域外魚量', borderColor: '#3b82f6', backgroundColor: '#3b82f6', borderWidth: 2, radius: 0, data: [], tension: 0.4 },
+                        { label: '300步內捕獲魚量', borderColor: '#eab308', backgroundColor: '#eab308', borderWidth: 2, radius: 0, data: [], tension: 0.4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, animation: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } } },
+                    scales: { x: { display: false }, y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 9 }, maxTicksLimit: 5 } } }
+                }
+            });
+        }
+
+        // --- Agent Classes ---
+        class Turbine {
+            constructor(x, y, id) { this.id = id; this.x = x; this.y = y; this.r = 8; this.fishCount = 0; }
+            draw(ctx) {
+                if (state.phase === 'pre') {
+                    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.setLineDash([4,4]);
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+                } else {
+                    const isFull = this.fishCount >= simConfig.turbineCapacity;
+                    ctx.fillStyle = isFull ? '#fb923c' : '#475569';
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill();
+                    if (state.phase === 'construction' && Math.random() < 0.1) {
+                        ctx.strokeStyle = `rgba(239,68,68,${Math.random()*0.6})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(this.x, this.y, this.r + Math.random()*150, 0, Math.PI*2); ctx.stroke();
+                    }
+                    if (state.phase === 'operation') {
+                        const r = 10 + 15 * state.foulingBiomass;
+                        ctx.strokeStyle = `rgba(16, 185, 129, ${0.3 + 0.7*state.foulingBiomass})`; ctx.lineWidth = 2 + 2 * state.foulingBiomass; ctx.beginPath(); ctx.arc(this.x, this.y, r, 0, Math.PI*2); ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        class Fish {
+            constructor(isNewBirth = false) {
+                if (isNewBirth) {
+                    if (Math.random() < 0.5) { this.x = Math.random() * WORLD_W; this.y = Math.random() < 0.5 ? 0 : WORLD_H; } 
+                    else { this.x = Math.random() < 0.5 ? 0 : WORLD_W; this.y = Math.random() * WORLD_H; }
+                } else {
+                    this.x = Math.random() * WORLD_W; this.y = Math.random() * WORLD_H;
+                }
+                this.vx = (Math.random()-0.5); this.vy = (Math.random()-0.5);
+                this.isInside = false;
+                this.birthTime = state.time;
+                if (!isNewBirth) this.birthTime -= Math.floor(Math.random() * 801);
+                this.dead = false;
+                this.checkLocation();
+            }
+            checkLocation() { this.isInside = isInsideFarmByPixel(this.x, this.y); }
+            update() {
+                if (state.time - this.birthTime > simConfig.fishLifespan) { this.dead = true; return; }
+                let speed = 1.5;
+                if (state.phase === 'construction') {
+                    state.turbines.forEach(t => {
+                        let dx = this.x - t.x; let dy = this.y - t.y; let d = Math.sqrt(dx*dx+dy*dy);
+                        if (d < 140) { this.vx += (dx/d)*0.15; this.vy += (dy/d)*0.15; speed = 3; }
+                    });
+                }
+                if (state.phase === 'operation') {
+                    let minD = Infinity; let tCl = null;
+                    state.turbines.forEach(t => {
+                        let dx = t.x - this.x; let dy = t.y - this.y; let d = Math.sqrt(dx*dx+dy*dy);
+                        if (d < minD) { minD = d; tCl = t; }
+                    });
+                    let attractionStr = 0.02 + 0.03 * state.foulingBiomass;
+                    if (state.metrics.popInside > 250) attractionStr *= 0.2; 
+                    if (minD < 120 && tCl.fishCount < simConfig.turbineCapacity) {
+                        this.vx += ((tCl.x - this.x)/minD) * attractionStr; this.vy += ((tCl.y - this.y)/minD) * attractionStr;
+                        if (minD < 40) speed = 0.5;
+                    }
+                    if (minD < 50) tCl.fishCount++;
+                    if (this.isInside && Math.random() < (state.spilloverPressure * 0.05)) { this.vx = (Math.random()-0.5)*3; this.vy = (Math.random()-0.5)*3; }
+                }
+                this.x += this.vx * speed; this.y += this.vy * speed;
+                if (this.x < 0 || this.x > WORLD_W) this.vx *= -1; if (this.y < 0 || this.y > WORLD_H) this.vy *= -1;
+                let v = Math.sqrt(this.vx*this.vx + this.vy*this.vy); if (v > 1) { this.vx /= v; this.vy /= v; }
+                this.checkLocation();
+            }
+            draw(ctx) {
+                ctx.fillStyle = this.isInside ? '#2563eb' : '#3b82f6';
+                const size = this.isInside ? 3 : 2.5; ctx.beginPath(); ctx.arc(this.x, this.y, size, 0, Math.PI*2); ctx.fill();
+            }
+        }
+
+        class Boat {
+            constructor(id) {
+                this.id = id;
+                this.x = Math.random() < 0.5 ? -20 : WORLD_W+20;
+                this.y = Math.random() * WORLD_H;
+                this.vx = (Math.random()-0.5); this.vy = (Math.random()-0.5);
+                this.isRogue = Math.random() > state.complianceRate;
+                this.catchCount = 0; this.lifeTimer = 0;
+                this.state = 'MOVING'; this.aiTimer = Math.floor(Math.random() * 60); 
+                this.targetX = this.x; this.targetY = this.y; this.scanRadius = 80;
+                this.returnVx = 0; this.returnVy = 0;
+            }
+            update(fishList) {
+                this.aiTimer++; this.lifeTimer++;
+                if (this.state === 'RETURNING') { this.x += this.returnVx; this.y += this.returnVy; return; }
+                if (this.lifeTimer > simConfig.boatLifespan) { this.startReturn(); return; }
+                if (this.state === 'MOVING') {
+                    this.vx += (Math.random() - 0.5) * 0.15; this.vy += (Math.random() - 0.5) * 0.15;
+                    if (this.aiTimer > 150) { this.state = 'SCANNING'; this.aiTimer = 0; }
+                } else if (this.state === 'SCANNING') {
+                    this.vx *= 0.9; this.vy *= 0.9;
+                    if (this.aiTimer > 40) { this.findBestTarget(fishList); this.state = 'MOVING'; this.aiTimer = 0; }
+                }
+                let nextX = this.x + this.vx; let nextY = this.y + this.vy;
+                if (state.phase !== 'pre' && !this.isRogue) {
+                    const PADDING = 5;
+                    const inFarm = (nextX > FARM_X - PADDING && nextX < FARM_X + FARM_W + PADDING && nextY > FARM_Y - PADDING && nextY < FARM_Y + FARM_H + PADDING);
+                    if (inFarm) {
+                        let dLeft = Math.abs(this.x - FARM_X), dRight = Math.abs(this.x - (FARM_X + FARM_W)), dTop = Math.abs(this.y - FARM_Y), dBottom = Math.abs(this.y - (FARM_Y + FARM_H));
+                        let min = Math.min(dLeft, dRight, dTop, dBottom);
+                        if (min === dLeft) { this.x = FARM_X - PADDING; if (this.vx > 0) this.vx = 0; }
+                        else if (min === dRight) { this.x = FARM_X + FARM_W + PADDING; if (this.vx < 0) this.vx = 0; }
+                        else if (min === dTop) { this.y = FARM_Y - PADDING; if (this.vy > 0) this.vy = 0; }
+                        else if (min === dBottom) { this.y = FARM_Y + FARM_H + PADDING; if (this.vy < 0) this.vy = 0; }
+                        if (min === dLeft || min === dRight) { if (Math.abs(this.vy) < 0.1) this.vy += (Math.random()-0.5) * 0.2; } else { if (Math.abs(this.vx) < 0.1) this.vx += (Math.random()-0.5) * 0.2; }
+                    } else { this.x = nextX; this.y = nextY; }
+                } else { this.x = nextX; this.y = nextY; }
+                if (this.x < -50 || this.x > WORLD_W+50) this.vx *= -1; if (this.y < -50 || this.y > WORLD_H+50) this.vy *= -1;
+                const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy); if (speed > 1.5) { this.vx = (this.vx/speed)*1.5; this.vy = (this.vy/speed)*1.5; }
+                for(let i=fishList.length-1; i>=0; i--) {
+                    let f = fishList[i];
+                    if ((this.x-f.x)**2 + (this.y-f.y)**2 < 400) { 
+                        if (Math.random() < 0.08) {
+                            if (isNearFarmByPixel(f.x, f.y) || f.isInside) state.catchWindow++;
+                            fishList.splice(i,1); this.catchCount++;
+                            if (this.catchCount >= simConfig.boatCapacity) { this.startReturn(); }
+                        }
+                    }
+                }
+            }
+            startReturn() {
+                this.state = 'RETURNING';
+                let dLeft = this.x + 50, dRight = (WORLD_W + 50) - this.x, dTop = this.y + 50, dBottom = (WORLD_H + 50) - this.y;
+                let min = Math.min(dLeft, dRight, dTop, dBottom); const exitSpeed = 2.5;
+                if (min === dLeft) { this.returnVx = -exitSpeed; this.returnVy = 0; } else if (min === dRight) { this.returnVx = exitSpeed; this.returnVy = 0; } else if (min === dTop) { this.returnVx = 0; this.returnVy = -exitSpeed; } else { this.returnVx = 0; this.returnVy = exitSpeed; }
+            }
+            findBestTarget(fishList) {
+                let sumX = 0, sumY = 0, count = 0;
+                fishList.forEach(f => {
+                    const dx = f.x - this.x; const dy = f.y - this.y;
+                    if (dx*dx + dy*dy < this.scanRadius*this.scanRadius) { sumX += f.x; sumY += f.y; count++; }
+                });
+                if (count > 0) {
+                    const avgX = sumX / count; const avgY = sumY / count;
+                    const dx = avgX - this.x; const dy = avgY - this.y; const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > 0) { this.vx += (dx/dist) * 0.8; this.vy += (dy/dist) * 0.8; }
+                } else { const angle = Math.random() * Math.PI * 2; this.vx += Math.cos(angle) * 0.5; this.vy += Math.sin(angle) * 0.5; }
+            }
+            draw(ctx) {
+                ctx.save(); ctx.translate(this.x, this.y); 
+                if (this.state === 'SCANNING') { ctx.beginPath(); ctx.strokeStyle = this.isRogue ? 'rgba(107, 33, 168, 0.2)' : 'rgba(244, 63, 94, 0.2)'; ctx.arc(0, 0, this.scanRadius, 0, Math.PI*2); ctx.stroke(); }
+                ctx.rotate(Math.atan2(this.vy, this.vx)+Math.PI/2);
+                if (this.state === 'RETURNING') ctx.fillStyle = '#94a3b8'; else ctx.fillStyle = this.isRogue ? '#6b21a8' : '#f43f5e'; 
+                ctx.beginPath(); ctx.moveTo(0,-8); ctx.lineTo(5,8); ctx.lineTo(-5,8); ctx.fill(); ctx.restore();
+            }
+        }
+
+        // --- Core Simulation Logic (Decoupled) ---
+        function step() {
+            state.time++;
+            state.fish = state.fish.filter(f => !f.dead);
+            
+            // 1. Reset metrics per step
+            let inside = 0, near = 0, outside = 0;
+            state.turbines.forEach(t => t.fishCount = 0);
+
+            // 2. Update Entities
+            state.fish.forEach(f => {
+                f.update();
+                if (f.isInside) inside++;
+                else {
+                    outside++;
+                    let dx = Math.max(FARM_X - f.x, 0, f.x - (FARM_X + FARM_W));
+                    let dy = Math.max(FARM_Y - f.y, 0, f.y - (FARM_Y + FARM_H));
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist <= BUFFER_DIST) near++;
+                }
+            });
+
+            updateBoats();
+            state.boats.forEach(b => b.update(state.fish));
+
+            // 3. Update State Metrics
+            state.metrics.popInside = inside;
+            state.metrics.popNear = near;
+            state.metrics.popOutside = outside;
+
+            // 4. System Dynamics
+            const K_inside = 150 + 200 * state.foulingBiomass; 
+            const spillTarget = Math.max(0, (inside - K_inside) / K_inside);
+            state.spilloverPressure += (spillTarget - state.spilloverPressure) / (state.ecoTau * 0.6);
+            state.spilloverPressure = Math.max(0, Math.min(1, state.spilloverPressure));
+
+            // 5. Recruitment
+            const totalPop = state.fish.length;
+            let baseProb = 0.05 * state.fishRecoveryRate;
+            if (totalPop < 30) baseProb *= 0.5;
+            if (state.phase === 'operation') baseProb *= (1.0 + 0.6 * state.foulingBiomass);
+            const K_total = state.baseCarryingCapacity + 150 * state.foulingBiomass;
+            if (totalPop < K_total) {
+                const expected = baseProb * totalPop;
+                const births = Math.floor(expected) + (Math.random() < (expected % 1) ? 1 : 0);
+                const actualBirths = Math.min(births, 20); 
+                for (let i = 0; i < actualBirths; i++) state.fish.push(new Fish(true));
+            }
+
+            // 6. Stats Buffer for CLD
+            if (state.time % 30 === 0) {
+                state.cldCatchRate = state.catchWindow;
+                state.catchWindow = 0;
+            }
+        }
+
+        // --- Helper for Batches ---
+        function updateBoats() {
+            for (let i = state.boats.length - 1; i >= 0; i--) {
+                const b = state.boats[i];
+                if (b.state === 'RETURNING') {
+                    if (b.x < -50 || b.x > WORLD_W+50 || b.y < -50 || b.y > WORLD_H+50) {
+                        state.boats.splice(i, 1);
+                    }
+                }
+            }
+            let target = state.boatCount;
+            if (state.boats.length < target) state.boats.push(new Boat(Math.floor(Math.random()*1000)));
+            else if (state.boats.length > target) state.boats.pop(); 
+        }
+
+        // --- Visual Loop ---
+        function gameLoop() {
+            if (state.isRunning) {
+                for(let i=0; i<state.simSpeed; i++) {
+                    step();
+                    // Update visual chart only periodically
+                    if (state.time % 30 === 0 && mainChart) {
+                        const maxLen = 60;
+                        const labels = mainChart.data.labels;
+                        const ds = mainChart.data.datasets;
+                        labels.push('');
+                        ds[0].data.push(state.metrics.popInside);
+                        ds[1].data.push(state.metrics.popNear);
+                        ds[2].data.push(state.metrics.popOutside);
+                        if (labels.length > maxLen) { labels.shift(); ds.forEach(d => d.data.shift()); }
+                        mainChart.update();
+                    }
+                }
+            }
+
+            // Rendering
+            ctx.clearRect(0,0,WORLD_W, WORLD_H);
+            // 風機範圍界線：使用 turbines buffer 2,000 m dissolve 的多邊形（並畫出近場 NEAR_BUFFER_M 虛線）
+            drawFarmBoundary(ctx);
+
+            state.turbines.forEach(t => t.draw(ctx));
+            state.fish.forEach(f => f.draw(ctx));
+            state.boats.forEach(b => b.draw(ctx));
+            drawCLD();
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- Interaction ---
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            let clicked = null; let type = '';
+            for(let b of state.boats) { if ((b.x-x)**2 + (b.y-y)**2 < 400) { clicked = b; type = '船隻 (Boat)'; break; } }
+            if (!clicked) { for(let t of state.turbines) { if ((t.x-x)**2 + (t.y-y)**2 < 400) { clicked = t; type = '風機 (Turbine)'; break; } } }
+            if (!clicked) { for(let f of state.fish) { if ((f.x-x)**2 + (f.y-y)**2 < 150) { clicked = f; type = '魚類 (Fish)'; break; } } }
+            if (clicked) showTooltip(e.clientX - rect.left, e.clientY - rect.top, type, clicked);
+            else tooltip.classList.add('hidden');
+        });
+
+        function showTooltip(uiX, uiY, type, agent) {
+            let content = `<div class="font-bold text-amber-400 mb-1 border-b border-slate-600 pb-1">${type}</div>`;
+            if (type.includes('船隻')) {
+                const isReturning = agent.state === 'RETURNING';
+                const statusText = isReturning ? (agent.lifeTimer > simConfig.boatLifespan ? '時間到返航' : '滿載返航') : agent.state;
+                content += `<div>ID: #${agent.id}</div><div>狀態: ${statusText}</div><div>漁獲: ${agent.catchCount} / ${simConfig.boatCapacity}</div>`;
+            } else if (type.includes('風機')) {
+                const load = agent.fishCount;
+                content += `<div>負載: ${load} / ${simConfig.turbineCapacity}</div><div>附著: ${Math.round(state.foulingBiomass*100)}%</div>`;
+            } else if (type.includes('魚類')) {
+                content += `<div>年齡: ${state.time - agent.birthTime}</div>`;
+            }
+            tooltip.innerHTML = content; tooltip.style.left = (uiX+15)+'px'; tooltip.style.top = (uiY+15)+'px'; tooltip.classList.remove('hidden');
+        }
+
+        // --- CLD Drawing & Utils (Kept same) ---
+        function drawCLD() {
+            // (Same drawing logic as previous, using state metrics)
+            const w = cldCanvas.offsetWidth; const h = cldCanvas.offsetHeight; cldCanvas.width = w; cldCanvas.height = h;
+            const ctx = cldCtx; ctx.clearRect(0,0,w,h);
+            const cx = w/2, cy = h/2 + 10, R = Math.min(w,h) * 0.38;
+            const normPop = Math.max(200, state.baseCarryingCapacity * 1.2);
+            const scaleFouling = 1 + state.foulingBiomass * 0.5;
+            const scaleInside = 1 + (state.metrics.popInside / normPop) * 0.8;
+            const scaleOutside = 1 + (state.metrics.popOutside / normPop) * 0.5;
+            const scaleFishing = 1 + (state.cldCatchRate / 40) * 0.4; 
+            const scaleSpillover = 1 + state.spilloverPressure * 0.8;
+            
+            let spillOffsetX = 0, spillOffsetY = 0;
+            if (state.phase === 'operation' && state.spilloverPressure > 0.01) {
+                spillOffsetX = (Math.random() - 0.5) * 4 * state.spilloverPressure;
+                spillOffsetY = (Math.random() - 0.5) * 4 * state.spilloverPressure;
+            }
+
+            const nodes = {
+                farm: { x: cx, y: cy - R, label: "離岸風機", r: 24, val: 1 },
+                fouling: { x: cx + R*0.7, y: cy - R*0.7, label: "微生物附著", r: 24 * scaleFouling, val: state.foulingBiomass },
+                inside: { x: cx + R*0.7, y: cy + R*0.7, label: "風場內魚量", r: 24 * scaleInside, val: state.metrics.popInside },
+                spillover: { x: cx + spillOffsetX, y: cy + R + spillOffsetY, label: "外溢效應", r: 24 * scaleSpillover, val: state.spilloverPressure },
+                outside: { x: cx - R*0.8, y: cy + R*0.6, label: "風場外魚量", r: 24 * scaleOutside, val: state.metrics.popOutside },
+                fishing: { x: cx - R*0.8, y: cy - R*0.6, label: "漁民捕撈", r: 24 * scaleFishing, val: state.cldCatchRate }
+            };
+            
+            const active = state.phase === 'operation';
+            drawLink(ctx, nodes.farm, nodes.fouling, active, "+", true);
+            drawLink(ctx, nodes.fouling, nodes.inside, active, "+", true); 
+            drawLink(ctx, nodes.inside, nodes.spillover, active, "+", true);
+            drawLink(ctx, nodes.spillover, nodes.outside, active, "+");
+            drawLink(ctx, nodes.outside, nodes.fishing, true, "+");
+            drawLink(ctx, nodes.fishing, nodes.outside, true, "-", "#ef4444");
+
+            for (let k in nodes) {
+                let n = nodes[k]; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+                if (k === 'inside') ctx.fillStyle = `rgba(59, 130, 246, ${0.1 + Math.min(0.9, n.val / normPop)})`;
+                else if (k === 'outside') ctx.fillStyle = `rgba(30, 64, 175, ${0.1 + Math.min(0.9, n.val / normPop)})`;
+                else if (k === 'spillover') ctx.fillStyle = `rgba(147, 51, 234, ${0.1 + n.val * 0.9})`;
+                else if (k === 'fouling') ctx.fillStyle = `rgba(16, 185, 129, ${0.1 + n.val})`;
+                else if (k === 'fishing') ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(1, n.val/20)})`;
+                else ctx.fillStyle = "white"; 
+                ctx.fill(); ctx.strokeStyle = (active || k === 'fishing' || k === 'outside') ? "#334155" : "#cbd5e1";
+                if (active && (k==='fouling' || k==='inside' || k==='spillover')) ctx.strokeStyle = "#3b82f6";
+                ctx.lineWidth = 2; ctx.stroke();
+                
+                if (['outside', 'spillover'].includes(k) && n.val > 0.5) ctx.fillStyle = "white";
+                else if (k === 'inside' && n.val > normPop * 0.5) ctx.fillStyle = "white";
+                else ctx.fillStyle = "#1e293b"; 
+                ctx.font = "bold 10px Noto Sans TC"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(n.label, n.x, n.y);
+            }
+        }
+        
+        function drawLink(ctx, n1, n2, active, sign, hasDelay=false, color="#e2e8f0") {
+            ctx.strokeStyle = active ? "#3b82f6" : color; if (sign === "-") ctx.strokeStyle = "#ef4444"; if (!active) ctx.strokeStyle = "#e2e8f0";
+            let angle = Math.atan2(n2.y - n1.y, n2.x - n1.x); let start = n1.r, end = Math.sqrt((n2.x-n1.x)**2 + (n2.y-n1.y)**2) - n2.r;
+            ctx.lineWidth = active ? 2 : 1; ctx.beginPath(); ctx.moveTo(n1.x + Math.cos(angle)*start, n1.y + Math.sin(angle)*start); ctx.lineTo(n1.x + Math.cos(angle)*end, n1.y + Math.sin(angle)*end); ctx.stroke();
+            let tx = n1.x + Math.cos(angle)*end; let ty = n1.y + Math.sin(angle)*end; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx - 6*Math.cos(angle-Math.PI/6), ty - 6*Math.sin(angle-Math.PI/6)); ctx.lineTo(tx - 6*Math.cos(angle+Math.PI/6), ty - 6*Math.sin(angle+Math.PI/6)); ctx.fillStyle = ctx.strokeStyle; ctx.fill();
+            if (hasDelay && active) { let mx = (n1.x + n2.x)/2, my = (n1.y + n2.y)/2; ctx.save(); ctx.translate(mx, my); ctx.rotate(angle + Math.PI/2); ctx.beginPath(); ctx.moveTo(-3, -5); ctx.lineTo(-3, 5); ctx.moveTo(3, -5); ctx.lineTo(3, 5); ctx.stroke(); ctx.restore(); }
+        }
+
+        // --- Sensitivity Analysis Controller ---
+        const modal = document.getElementById('analysisModal');
+        const progressBar = document.getElementById('expProgressBar');
+        const progressContainer = document.getElementById('expProgressContainer');
+        const statusText = document.getElementById('expStatusText');
+        const percentText = document.getElementById('expPercent');
+
+        function toggleAnalysisModal() {
+            if (modal.classList.contains('hidden')) {
+                // Sync Main Params to Modal Inputs
+                document.getElementById('expBoatCount').value = document.getElementById('boatCountSlider').value;
+                document.getElementById('expRecovery').value = document.getElementById('recoverySlider').value;
+                document.getElementById('expCompliance').value = document.getElementById('complianceSlider').value;
+                document.getElementById('expBaseK').value = document.getElementById('fishTotalSlider').value;
+                document.getElementById('expFouling').value = document.getElementById('foulingSlider').value;
+                
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => modal.classList.add('show'), 10);
+            } else {
+                modal.classList.remove('show');
+                setTimeout(() => { modal.classList.remove('flex'); modal.classList.add('hidden'); }, 300);
+            }
+        }
+
+        // Advanced Toggle
+        function toggleAdvanced() {
+            const sec = document.getElementById('advancedSection');
+            const arr = document.getElementById('advArrow');
+            if (sec.classList.contains('open')) {
+                sec.classList.remove('open');
+                arr.style.transform = 'rotate(0deg)';
+            } else {
+                sec.classList.add('open');
+                arr.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        // Exp Advanced Toggle
+        function toggleExpAdvanced() {
+            const sec = document.getElementById('expAdvancedSection');
+            const arr = document.getElementById('expAdvArrow');
+            if (sec.classList.contains('open')) {
+                sec.classList.remove('open');
+                arr.style.transform = 'rotate(0deg)';
+            } else {
+                sec.classList.add('open');
+                arr.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Config Listeners
+        document.getElementById('fishLifeSlider').addEventListener('input', (e)=>{ simConfig.fishLifespan = parseInt(e.target.value); document.getElementById('fishLifeDisplay').innerText = simConfig.fishLifespan; });
+        document.getElementById('boatLifeSlider').addEventListener('input', (e)=>{ simConfig.boatLifespan = parseInt(e.target.value); document.getElementById('boatLifeDisplay').innerText = simConfig.boatLifespan; });
+        document.getElementById('boatCapSlider').addEventListener('input', (e)=>{ simConfig.boatCapacity = parseInt(e.target.value); document.getElementById('boatCapDisplay').innerText = simConfig.boatCapacity; });
+        document.getElementById('turbineCapSlider').addEventListener('input', (e)=>{ simConfig.turbineCapacity = parseInt(e.target.value); document.getElementById('turbineCapDisplay').innerText = simConfig.turbineCapacity; });
+
+        async function runExperiment(type) {
+            progressContainer.classList.remove('hidden');
+            const reps = parseInt(document.getElementById('expReplicates').value);
+            const burnIn = parseInt(document.getElementById('expBurnIn').value);
+            const sampling = parseInt(document.getElementById('expSampling').value);
+            
+            // Read advanced config
+            const expFishLife = parseInt(document.getElementById('expFishLife').value);
+            const expBoatLife = parseInt(document.getElementById('expBoatLife').value);
+            const expBoatCap = parseInt(document.getElementById('expBoatCap').value);
+            const expTurbineCap = parseInt(document.getElementById('expTurbineCap').value);
+            
+            // Read base params
+            const baseBoatCount = parseInt(document.getElementById('expBoatCount').value);
+            const baseRecovery = parseFloat(document.getElementById('expRecovery').value);
+            const baseCompliance = parseFloat(document.getElementById('expCompliance').value);
+            const baseK = parseInt(document.getElementById('expBaseK').value);
+            const baseFouling = parseFloat(document.getElementById('expFouling').value);
+
+            // Apply experimental advanced config
+            const originalConfig = { ...simConfig };
+            simConfig.fishLifespan = expFishLife;
+            simConfig.boatLifespan = expBoatLife;
+            simConfig.boatCapacity = expBoatCap;
+            simConfig.turbineCapacity = expTurbineCap;
+
+            let configs = [];
+            
+            if (type === 'Custom') {
+                 configs.push({
+                     phase: 'operation', 
+                     fouling: baseFouling,
+                     boat: baseBoatCount,
+                     recovery: baseRecovery,
+                     compliance: baseCompliance,
+                     label: 'Custom'
+                 });
+            }
+            else if (type === 'Phase-A') {
+                ['pre', 'construction', 'operation'].forEach(p => {
+                    configs.push({ phase: p, fouling: (p==='pre'?0:p==='construction'?0.1:1.0), label: p, 
+                                   boat: baseBoatCount, recovery: baseRecovery, compliance: baseCompliance });
+                });
+            } else if (type === 'Phase-B') {
+                [0.0, 0.5, 1.0].forEach(f => {
+                    configs.push({ phase: 'operation', fouling: f, label: `Fouling ${f}`,
+                                   boat: baseBoatCount, recovery: baseRecovery, compliance: baseCompliance });
+                });
+            } else if (type === 'Compliance') {
+                // Sweep Compliance 0.0 - 1.0 in 0.1 steps
+                for(let c=0.0; c<=1.01; c+=0.1) {
+                     configs.push({ phase: 'operation', fouling: 1.0, compliance: parseFloat(c.toFixed(1)), label: `Comp ${c.toFixed(1)}`,
+                                   boat: 15, recovery: 1.0 }); // Fixed to match requirement
+                }
+            } else if (type === 'Recovery-Boat') {
+                // 2D Scan: Recovery (0.2-2.0, step 0.2, 10 steps) x Boat (0-45, step 5, 10 steps) = 100 grids
+                // Updated to 100 grid based on requirement
+                for(let r=0.2; r<=2.01; r+=0.2) {
+                    for(let b=0; b<=45; b+=5) {
+                        configs.push({ 
+                            phase: 'operation', fouling: 1.0, 
+                            recovery: parseFloat(r.toFixed(1)), boat: b, compliance: 0.6,
+                            label: `R:${r.toFixed(1)} B:${b}` 
+                        });
+                    }
+                }
+            }
+
+            let results = [];
+            let totalSteps = configs.length * reps;
+            let currentStep = 0;
+
+            for (let cfg of configs) {
+                for (let i = 0; i < reps; i++) {
+                    // Reset Logic (Headless)
+                    state.time = 0;
+                    state.fish = []; for(let k=0; k<300; k++) state.fish.push(new Fish());
+                    state.turbines.forEach(t => t.fishCount = 0);
+                    state.boats = [];
+                    state.metrics = { popInside: 0, popOutside: 0, popNear: 0 };
+                    state.catchWindow = 0;
+                    state.spilloverPressure = 0;
+                    state.foulingBiomass = 0;
+
+                    state.phase = cfg.phase || 'operation';
+                    state.foulingBiomass = (cfg.fouling !== undefined) ? cfg.fouling : baseFouling;
+                    if(state.phase==='pre') state.foulingBiomass = 0;
+                    
+                    state.complianceRate = (cfg.compliance !== undefined) ? cfg.compliance : baseCompliance;
+                    state.boatCount = (cfg.boat !== undefined) ? cfg.boat : baseBoatCount;
+                    state.fishRecoveryRate = (cfg.recovery !== undefined) ? cfg.recovery : baseRecovery;
+                    state.baseCarryingCapacity = baseK; 
+                    
+                    for(let t=0; t<burnIn; t++) step();
+
+                    for(let t=0; t<sampling; t++) {
+                        step();
+                        if (t % 30 === 0) {
+                            results.push({
+                                run_id: `${type}_${cfg.label}_Rep${i}`,
+                                time: state.time,
+                                phase: state.phase,
+                                boatCount: state.boatCount,
+                                complianceRate: state.complianceRate,
+                                foulingBiomass: state.foulingBiomass,
+                                baseCarryingCapacity: state.baseCarryingCapacity,
+                                fishRecoveryRate: state.fishRecoveryRate,
+                                popInside: state.metrics.popInside,
+                                popNear: state.metrics.popNear,
+                                popOutside: state.metrics.popOutside, 
+                                totalFish: state.fish.length,
+                                cldCatchRate: state.cldCatchRate, 
+                                spilloverPressure: state.spilloverPressure,
+                                adv_FishLife: simConfig.fishLifespan,
+                                adv_BoatLife: simConfig.boatLifespan,
+                                adv_BoatCap: simConfig.boatCapacity,
+                                adv_TurbCap: simConfig.turbineCapacity
+                            });
+                        }
+                    }
+
+                    currentStep++;
+                    const pct = Math.round((currentStep / totalSteps) * 100);
+                    progressBar.style.width = pct + '%';
+                    percentText.innerText = pct + '%';
+                    
+                    await new Promise(r => setTimeout(r, 0));
+                }
+            }
+
+            exportToCSV(results, `${type}_Results.csv`);
+            
+            Object.assign(simConfig, originalConfig);
+            
+            resetSimulation();
+            statusText.innerText = "Done!";
+            setTimeout(() => { progressContainer.classList.add('hidden'); }, 3000);
+        }
+
+        function exportToCSV(data, filename) {
+            if (data.length === 0) return;
+            const headers = Object.keys(data[0]);
+            const csvContent = [
+                headers.join(','),
+                ...data.map(row => headers.map(fieldName => row[fieldName]).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- Standard UI Events ---
+        document.getElementById('speedSlider').addEventListener('input', (e) => { state.simSpeed = parseInt(e.target.value); document.getElementById('speedDisplay').innerText = state.simSpeed + 'x'; });
+        document.getElementById('fishTotalSlider').addEventListener('input', (e) => { state.baseCarryingCapacity = parseInt(e.target.value); document.getElementById('fishTotalDisplay').innerText = state.baseCarryingCapacity; });
+        document.getElementById('recoverySlider').addEventListener('input', (e) => { state.fishRecoveryRate = parseFloat(e.target.value); document.getElementById('recoveryDisplay').innerText = state.fishRecoveryRate.toFixed(1) + 'x'; });
+        document.getElementById('boatCountSlider').addEventListener('input', (e) => { state.boatCount = parseInt(e.target.value); document.getElementById('boatCountDisplay').innerText = state.boatCount; });
+        document.getElementById('complianceSlider').addEventListener('input', (e) => { state.complianceRate = parseFloat(e.target.value); document.getElementById('complianceDisplay').innerText = Math.round(state.complianceRate * 100) + '%'; state.boats.forEach(b => { b.isRogue = Math.random() > state.complianceRate; }); });
+        document.getElementById('foulingSlider').addEventListener('input', (e) => { state.foulingBiomass = parseFloat(e.target.value); document.getElementById('foulingDisplay').innerText = Math.round(state.foulingBiomass * 100) + '%'; });
+
+        function setPhase(p) {
+            state.phase = p;
+            document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+p).classList.add('active');
+            const fSlider = document.getElementById('foulingSlider');
+            if (p === 'operation') { state.foulingBiomass = 1.0; fSlider.value = 1.0; } 
+            else if (p === 'construction') { state.foulingBiomass = 0.1; fSlider.value = 0.1; } 
+            else { state.foulingBiomass = 0.0; fSlider.value = 0.0; }
+            document.getElementById('foulingDisplay').innerText = Math.round(state.foulingBiomass * 100) + '%';
+        }
+
+        function togglePause() {
+            state.isRunning = !state.isRunning;
+            const btn = document.getElementById('pauseBtn');
+            btn.innerText = state.isRunning ? "暫停" : "繼續";
+            btn.classList.toggle('bg-slate-800');
+            btn.classList.toggle('bg-green-600');
+        }
+
+        function resetSimulation() {
+            setPhase('pre');
+            state.fish = []; for(let i=0; i<300; i++) state.fish.push(new Fish());
+            state.metrics = { popInside: 0, popOutside: 0, popNear: 0 };
+            state.time = 0;
+            state.boatCount = 20; document.getElementById('boatCountSlider').value = 20; document.getElementById('boatCountDisplay').innerText = "20";
+            state.complianceRate = 0.6; document.getElementById('complianceSlider').value = 0.6; document.getElementById('complianceDisplay').innerText = "60%";
+            state.baseCarryingCapacity = 200; document.getElementById('fishTotalSlider').value = 200; document.getElementById('fishTotalDisplay').innerText = "200";
+            state.fishRecoveryRate = 1.0; document.getElementById('recoverySlider').value = 1.0; document.getElementById('recoveryDisplay').innerText = "1.0x";
+            state.foulingBiomass = 1.0; document.getElementById('foulingSlider').value = 1.0; document.getElementById('foulingDisplay').innerText = "100%";
+            
+            // Advanced Defaults
+            simConfig.fishLifespan = 3000; document.getElementById('fishLifeSlider').value = 3000; document.getElementById('fishLifeDisplay').innerText = 3000;
+            simConfig.boatLifespan = 2000; document.getElementById('boatLifeSlider').value = 2000; document.getElementById('boatLifeDisplay').innerText = 2000;
+            simConfig.boatCapacity = 100; document.getElementById('boatCapSlider').value = 100; document.getElementById('boatCapDisplay').innerText = 100;
+            simConfig.turbineCapacity = 10; document.getElementById('turbineCapSlider').value = 10; document.getElementById('turbineCapDisplay').innerText = 10;
+
+            if (mainChart) { mainChart.data.labels = []; mainChart.data.datasets.forEach(ds => ds.data = []); mainChart.update(); }
+        }
+
+        window.onload = () => {
+            // 讓 Canvas 尺寸與世界座標一致（避免點位換算後畫不出來）
+            canvas.width = WORLD_W; 
+            canvas.height = WORLD_H;
+
+            initChart();
+
+            // ✅ 1) 綁定「檔案選擇」事件：不綁這個，選完檔案就會「什麼都沒發生」😶
+            const turbineInput = document.getElementById('turbineFileInput');
+            turbineInput.addEventListener('change', async (e) => {
+                const file = e.target.files?.[0];
+                await handleTurbineUploadFile(file);
+                // 允許同一個檔案重選（不清空 value 會導致同檔案第二次不觸發 change）
+                e.target.value = '';
+            });
+
+            // ✅ 2) 初始化底圖與「預設」風機點位（你給的 DEFAULT_TURBINE_POINTS）
+            initBasemapIfNeeded();
+            applyTurbinesFromLonLat(DEFAULT_TURBINE_POINTS, false);
+
+            resetSimulation();
+            requestAnimationFrame(gameLoop);
+        };
+    </script>
+</body>
+</html>
